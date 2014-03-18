@@ -1,10 +1,12 @@
-﻿Name: RealtyShares.UserNotifications
+﻿Name: User Notifications
 AntiForgery: enabled
-Author: The Orchard Team
-Website: http://orchardproject.net
+Author: Lombiq
+Website: http://realtyshares.com
 Version: 1.0
-OrchardVersion: 1.0
-Description: Description for the module
+OrchardVersion: 1.7.2
+Description: Provides the ability to send simple notifications to users and groups of users.
 Features:
     RealtyShares.UserNotifications:
-        Description: Description for feature RealtyShares.UserNotifications.
+        Name: User Notifications
+        Description: Provides the ability to send simple notifications to users and groups of users.
+        Category: Community
