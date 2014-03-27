@@ -65,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.config" />
-    <Content Include="Views\Web.config" />
     <Content Include="Scripts\Web.config" />
     <Content Include="Styles\Web.config" />
     <Content Include="Properties\AssemblyInfo.cs" />
@@ -80,13 +79,59 @@
       <Project>{9916839C-39FC-4CEB-A5AF-89CA7E87119F}</Project>
       <Name>Orchard.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Orchard.Roles\Orchard.Roles.csproj">
+      <Project>{d10ad48f-407d-4db5-a328-173ec7cb010f}</Project>
+      <Name>Orchard.Roles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orchard.Tokens\Orchard.Tokens.csproj">
+      <Project>{6f759635-13d7-4e94-bcc9-80445d63f117}</Project>
+      <Name>Orchard.Tokens</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orchard.Users\Orchard.Users.csproj">
+      <Project>{79aed36e-abd0-4747-93d3-8722b042454b}</Project>
+      <Name>Orchard.Users</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminMenu.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Drivers\NotificationBatchPartDriver.cs" />
+    <Compile Include="Drivers\NotificationRecipientsPartDriver.cs" />
+    <Compile Include="Handlers\NotificationBatchPartHandler.cs" />
+    <Compile Include="Handlers\NotificationsUserPartHandler.cs" />
+    <Compile Include="Handlers\NotificationRecipientsPartHandler.cs" />
+    <Compile Include="Migrations.cs" />
+    <Compile Include="Models\INotification.cs" />
+    <Compile Include="Models\NotificationBatchPart.cs" />
+    <Compile Include="Models\NotificationsUserPart.cs" />
+    <Compile Include="Models\NotificationRecipientsPart.cs" />
+    <Compile Include="Permissions.cs" />
+    <Compile Include="Services\INotificationConverter.cs" />
+    <Compile Include="Services\INotificationService.cs" />
+    <Compile Include="Services\INotificationsToUserDispatcher.cs" />
+    <Compile Include="Services\NotificationConverter.cs" />
+    <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\NotificationsToUserDispatcher.cs" />
+    <Compile Include="Services\UserNotificationsUpdater.cs" />
     <Compile Include="TheShiftHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Models\" />
+    <Content Include="Placement.info">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Parts.NotificationBatch.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Parts.NotificationRecipients.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Readme.md" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,0 +1,23 @@
+﻿@model RealtyShares.UserNotifications.Models.NotificationBatchPart
+@using RealtyShares.UserNotifications.Models
+
+<fieldset>
+    <label>@T("Send to")</label>
+    <ul>
+        <li>
+            <input type="radio" value="Role" @if (Model.RecipientsType == NotificationBatchRecipientsType.Role)
+                                             { <text>checked="checked"</text> } name="@Html.FieldNameFor(m => m.RecipientsType)" id="@Html.FieldIdFor(m => m.RecipientsType)_Role" />
+            <label class="forcheckbox" for="@Html.FieldIdFor(m => m.RecipientsType)_Role">@T("Role")</label>
+        </li>
+        <li>
+            <input type="radio" value="RecipientList" @if (Model.RecipientsType == NotificationBatchRecipientsType.RecipientList)
+                                                      { <text>checked="checked"</text> } name="@Html.FieldNameFor(m => m.RecipientsType)" id="@Html.FieldIdFor(m => m.RecipientsType)_RecipientList" />
+            <label class="forcheckbox" for="@Html.FieldIdFor(m => m.RecipientsType)_RecipientList">@T("Recipient List")</label>
+        </li>
+        <li>
+            <input type="radio" value="AdhocRecipients" @if (Model.RecipientsType == NotificationBatchRecipientsType.AdhocRecipients)
+                                                        { <text>checked="checked"</text> } name="@Html.FieldNameFor(m => m.RecipientsType)" id="@Html.FieldIdFor(m => m.RecipientsType)_AdhocRecipients" />
+            <label class="forcheckbox" for="@Html.FieldIdFor(m => m.RecipientsType)_AdhocRecipients">@T("Adhoc recipients (usernames)")</label>
+        </li>
+    </ul>
+</fieldset>

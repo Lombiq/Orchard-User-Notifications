@@ -10,3 +10,4 @@ Features:
         Name: User Notifications
         Description: Provides the ability to send simple notifications to users and groups of users.
         Category: Community
+		Dependencies: Orchard.Users, Orchard.Roles, Orchard.Tokens

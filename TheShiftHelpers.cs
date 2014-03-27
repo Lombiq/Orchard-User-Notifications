@@ -1,4 +1,8 @@
-﻿using System;
+﻿// These classes are the same that are used to ease infoset storage in Orchard 1.8.
+// Included here so we can use them even on 1.7.2.
+// After migrating the module to 1.8 this file should be removed.
+
+using System;
 using System.Collections.Concurrent;
 using System.Globalization;
 using System.Linq.Expressions;
