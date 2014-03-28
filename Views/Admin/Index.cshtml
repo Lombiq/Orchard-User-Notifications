@@ -1,0 +1,11 @@
+﻿@{
+    Layout.Title = T("Tenant Management Dashboard");
+    
+    var notificationBatchShapes = ((Func<IEnumerable<dynamic>>)Model.NotificationBatchShapes)();
+}
+
+<h1>User Notifications</h1>
+@foreach(var shape in notificationBatchShapes)
+{
+    Display(shape);
+}

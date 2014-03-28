@@ -1,4 +1,8 @@
 ﻿<Placement>
   <Place Parts_NotificationRecipients_Edit="Content:5"
          Parts_NotificationBatch_Edit="Content:before.1" />
+  
+  <Match DisplayType="SummaryAdmin">
+    <Place Parts_NotificationBatch="Content:5" />
+  </Match>
 </Placement>

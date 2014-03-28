@@ -98,6 +98,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Drivers\NotificationBatchPartDriver.cs" />
     <Compile Include="Drivers\NotificationRecipientsPartDriver.cs" />
+    <Compile Include="Extensions\ContentManagerExtensions.cs" />
     <Compile Include="Handlers\NotificationBatchPartHandler.cs" />
     <Compile Include="Handlers\NotificationsUserPartHandler.cs" />
     <Compile Include="Handlers\NotificationRecipientsPartHandler.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Services\NotificationsToUserDispatcher.cs" />
     <Compile Include="Services\UserNotificationsUpdater.cs" />
     <Compile Include="TheShiftHelpers.cs" />
+    <None Include="Views\Admin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Placement.info">
@@ -133,6 +135,7 @@
   <ItemGroup>
     <Content Include="Readme.md" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
