@@ -1,11 +1,77 @@
-﻿@{
-    Layout.Title = T("Tenant Management Dashboard");
-    
-    var notificationBatchShapes = ((Func<IEnumerable<dynamic>>)Model.NotificationBatchShapes)();
+﻿@model RealtyShares.UserNotifications.ViewModels.NotificationBatchListViewModel
+
+@{
+    Layout.Title = T("User Notifications");
+
+    Style.Require("RealtyShares.UserNotifications.NotificationBatchList");
+
+    Script.Require("jQueryUI");
+
+
+    var selectListItems = new SelectListItem[]
+    {
+        new SelectListItem
+        {
+            Selected = true,
+            Text = T("Recently Sent").Text,
+            Value = RealtyShares.UserNotifications.ViewModels.NotificationBatchSortBy.DateSent.ToString()
+        },
+        new SelectListItem
+        {
+            Text = T("Title").Text,
+            Value = RealtyShares.UserNotifications.ViewModels.NotificationBatchSortBy.Title.ToString()
+        }  
+    };
 }
 
-<h1>User Notifications</h1>
-@foreach(var shape in notificationBatchShapes)
+@using (Html.BeginFormAntiForgeryPost())
 {
-    Display(shape);
+    <fieldset class="realtyshares-usernotifications-notificationbatchlist-list">
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.Keywords, T("Keywords:"))
+                @Html.TextBoxFor(m => m.Keywords)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.FromDate, T("From Date:"))
+                @Html.TextBoxFor(m => m.FromDate, new { @class = "realtyshares-usernotifications-notificationbatchlist-datetimefield" })
+            </li>
+            <li>
+                @Html.LabelFor(m => m.ToDate, T("To Date:"))
+                @Html.TextBoxFor(m => m.ToDate, new { @class = "realtyshares-usernotifications-notificationbatchlist-datetimefield" })
+            </li>
+            <li>
+                @Html.LabelFor(m => m.NotificationBatchSortBy, T("Sort By:"))
+                @Html.DropDownListFor(m => m.NotificationBatchSortBy, selectListItems)
+            </li>
+        </ol>
+    
+        <button type="submit" name="submit.Filter" value="submit.Filter">@T("Filter")</button>
+
+        <div class="realtyshares-usernotifications-notificationbatchlist-rightside">
+            @Html.ActionLink(T("Manage Recipient Lists").Text, "ManageRecipientLists", new { Area = "RealtyShares.UserNotifications" }, new { })
+            @Html.ActionLink(T("Create New Notification").Text, "Create", "Admin", new { Area = "Contents", Id = RealtyShares.UserNotifications.Constants.NotificationBatchContentType }, new { @class = "button" })
+        </div>
+    </fieldset>
+    
+    <fieldset class="contentItems bulk-items">
+        <ul>
+            @foreach (var shape in Model.NotificationBatchShapes())
+            {
+                <li>
+                    @Display(shape)
+                </li>
+            }
+        </ul>
+    </fieldset>
+}
+
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        (function ($) {
+            $(".realtyshares-usernotifications-notificationbatchlist-datetimefield").datepicker();
+        })(jQuery);
+    </script>
 }
