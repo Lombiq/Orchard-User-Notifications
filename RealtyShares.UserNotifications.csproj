@@ -112,9 +112,11 @@
     <Compile Include="Models\NotificationRecipientsPart.cs" />
     <Compile Include="Permissions.cs" />
     <Compile Include="ResourceManifest.cs" />
+    <Compile Include="Services\INotificationBatchService.cs" />
     <Compile Include="Services\INotificationConverter.cs" />
     <Compile Include="Services\INotificationService.cs" />
     <Compile Include="Services\INotificationsToUserDispatcher.cs" />
+    <Compile Include="Services\NotificationBatchService.cs" />
     <Compile Include="Services\NotificationConverter.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\NotificationsToUserDispatcher.cs" />

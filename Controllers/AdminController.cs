@@ -1,17 +1,15 @@
 ﻿using Orchard;
 using Orchard.ContentManagement;
-using Orchard.Core.Common.Models;
-using Orchard.Core.Title.Models;
 using Orchard.Localization;
 using Orchard.Logging;
 using Orchard.Mvc;
 using Orchard.UI.Admin;
 using Orchard.UI.Navigation;
+using RealtyShares.UserNotifications.Services;
 using RealtyShares.UserNotifications.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace RealtyShares.UserNotifications.Controllers
@@ -21,6 +19,7 @@ namespace RealtyShares.UserNotifications.Controllers
     {
         private readonly IContentManager _contentManager;
         private readonly IOrchardServices _orchardServices;
+        private readonly INotificationBatchService _notificationBatchService;
         
 
 
@@ -29,10 +28,11 @@ namespace RealtyShares.UserNotifications.Controllers
         public ILogger Logger { get; set; }
 
 
-        public AdminController(IOrchardServices orchardServices)
+        public AdminController(IOrchardServices orchardServices, INotificationBatchService notificationBatchService)
         {
             _orchardServices = orchardServices;
             _contentManager = orchardServices.ContentManager;
+            _notificationBatchService = notificationBatchService;
 
             T = NullLocalizer.Instance;
             Logger = NullLogger.Instance;
@@ -46,10 +46,7 @@ namespace RealtyShares.UserNotifications.Controllers
                 return new HttpUnauthorizedResult(T("You are not allowed to manage notifications.").Text);
             }
 
-            var notificationBatchItems = _contentManager
-                .Query(VersionOptions.AllVersions, Constants.NotificationBatchContentType)
-                .OrderByDescending<CommonPartRecord>(record => record.Id)
-                .List();
+            var notificationBatchItems = _notificationBatchService.GetNotificationBatches();
 
             return GetNotificationBatchListViewResult(notificationBatchItems, page, pageSize);
         }
@@ -63,22 +60,10 @@ namespace RealtyShares.UserNotifications.Controllers
                 return new HttpUnauthorizedResult(T("You are not allowed to manage notifications.").Text);
             }
 
-            var notificationBatchItems = _contentManager
-                .Query(VersionOptions.AllVersions, Constants.NotificationBatchContentType)
-                .OrderByDescending<CommonPartRecord>(record => record.Id)
-                .List()
-                .Where(item => item.As<CommonPart>().CreatedUtc >= (viewModel.FromDate ?? DateTime.MinValue)
-                    && item.As<CommonPart>().CreatedUtc <= (viewModel.ToDate ?? DateTime.MaxValue));
+            var keywords = (viewModel.Keywords ?? String.Empty).Split(' ', ',');
 
-            switch (viewModel.NotificationBatchSortBy)
-            {
-                case NotificationBatchSortBy.DateSent: notificationBatchItems = notificationBatchItems.OrderBy(item => item.As<CommonPart>().PublishedUtc);
-                    break;
-                case NotificationBatchSortBy.Title: notificationBatchItems = notificationBatchItems.OrderBy(item => item.As<TitlePart>().Title);
-                    break;
-                default: notificationBatchItems = notificationBatchItems.OrderBy(item => item.As<CommonPart>().CreatedUtc);
-                    break;
-            }
+            var notificationBatchItems = _notificationBatchService.GetFilteredNotificationBatches(keywords, 
+                viewModel.FromDate ?? DateTime.MinValue, viewModel.ToDate ?? DateTime.MaxValue, viewModel.NotificationBatchSortBy);
 
             return GetNotificationBatchListViewResult(notificationBatchItems);
         }
