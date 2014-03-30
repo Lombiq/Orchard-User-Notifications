@@ -14,7 +14,9 @@ namespace RealtyShares.UserNotifications.ViewModels
 
     public class NotificationBatchListViewModel
     {
-        public Func<IEnumerable<dynamic>> NotificationBatchShapes { get; set; }
+        public dynamic NotificationBatchShapes { get; set; }
+
+        public dynamic Pager { get; set; }
 
         public string Keywords { get; set; }
 

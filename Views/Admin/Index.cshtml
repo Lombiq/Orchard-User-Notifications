@@ -54,16 +54,17 @@
         </div>
     </fieldset>
     
-    <fieldset class="contentItems bulk-items">
-        <ul>
-            @foreach (var shape in Model.NotificationBatchShapes())
-            {
-                <li>
-                    @Display(shape)
-                </li>
-            }
-        </ul>
-    </fieldset>
+    if(Model.NotificationBatchShapes != null)
+    {
+        <fieldset class="contentItems bulk-items">
+            @Display(Model.NotificationBatchShapes)
+        </fieldset>
+        @Display(Model.Pager)
+    }
+    else
+    {
+        <h2>@("There are no notification batch to display.")</h2>
+    }
 }
 
 
