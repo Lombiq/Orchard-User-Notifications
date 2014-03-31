@@ -43,7 +43,7 @@
 
     var selectListITemsForPageSize = new SelectListItem[]
     {
-        new SelectListItem { Text = T("All").Text, Value = Model.RecipientListEntries.Count.ToString() },
+        new SelectListItem { Text = T("All").Text, Value = 0.ToString() },
         new SelectListItem { Text = "10", Value = 10.ToString(), Selected = true },
         new SelectListItem { Text = "50", Value = 50.ToString() },
         new SelectListItem { Text = "100", Value = 100.ToString() },

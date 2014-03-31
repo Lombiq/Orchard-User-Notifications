@@ -27,19 +27,21 @@ namespace RealtyShares.UserNotifications.Controllers
         private readonly IContentManager _contentManager;
         private readonly IOrchardServices _orchardServices;
         private readonly INotificationBatchService _notificationBatchService;
+        private readonly IRecipientListService _recipientListService;
         
-
 
         public Localizer T { get; set; }
 
         public ILogger Logger { get; set; }
 
 
-        public AdminController(IOrchardServices orchardServices, INotificationBatchService notificationBatchService)
+        public AdminController(IOrchardServices orchardServices, INotificationBatchService notificationBatchService, 
+            IRecipientListService recipientListService)
         {
             _orchardServices = orchardServices;
             _contentManager = orchardServices.ContentManager;
             _notificationBatchService = notificationBatchService;
+            _recipientListService = recipientListService;
 
             T = NullLocalizer.Instance;
             Logger = NullLogger.Instance;
@@ -82,10 +84,7 @@ namespace RealtyShares.UserNotifications.Controllers
                 return new HttpUnauthorizedResult(T("You are not allowed to manage notifications.").Text);
             }
 
-            var recipientLists = _contentManager
-                .Query(VersionOptions.Published, Constants.RecipientListContentType)
-                .OrderByDescending<TitlePartRecord>(record => record.Title)
-                .List();
+            var recipientLists = _recipientListService.GetRecipientLists();
 
             return GetRecipientListViewResult(recipientLists, page, pageSize);
         }
@@ -139,23 +138,7 @@ namespace RealtyShares.UserNotifications.Controllers
                 return new HttpUnauthorizedResult(T("You are not allowed to manage notifications.").Text);
             }
 
-            var recipientListItems = _contentManager
-                .Query(VersionOptions.Published, Constants.RecipientListContentType)
-                .OrderByDescending<TitlePartRecord>(record => record.Title)
-                .List();
-
-            switch (viewModel.RecipientListSortBy)
-            {
-                case  RecipientListSortBy.RecentlyCreatedDate: recipientListItems = recipientListItems.OrderByDescending(item => item.As<CommonPart>().CreatedUtc);
-                    break;
-                case RecipientListSortBy.RecentlyModifiedDate: recipientListItems = recipientListItems.OrderByDescending(item => item.As<CommonPart>().ModifiedUtc);
-                    break;
-                case RecipientListSortBy.Title:
-                    // It is already ordered by title.
-                    break;
-                default:
-                    break;
-            }
+            var recipientListItems = _recipientListService.GetOrderedRecipientLists(viewModel.RecipientListSortBy);
 
             return GetRecipientListViewResult(recipientListItems, 1, viewModel.PageSize);
         }
@@ -190,7 +173,8 @@ namespace RealtyShares.UserNotifications.Controllers
 
             if (recipientLists.Any())
             {
-                var pager = new Pager(_orchardServices.WorkContext.CurrentSite, new PagerParameters { Page = page, PageSize = pageSize });
+                var pagerParameters = pageSize == 0 ? new PagerParameters { Page = page, PageSize = null } : new PagerParameters { Page = page, PageSize = pageSize };
+                var pager = new Pager(_orchardServices.WorkContext.CurrentSite, pagerParameters);
 
                 dynamic pagerShape = _orchardServices.New.Pager(pager).TotalItemCount(recipientLists.Count());
 

@@ -111,6 +111,8 @@
     <Compile Include="Models\NotificationRecipientsPart.cs" />
     <Compile Include="Permissions.cs" />
     <Compile Include="ResourceManifest.cs" />
+    <Compile Include="Services\RecipientListService.cs" />
+    <Compile Include="Services\IRecipientListService.cs" />
     <Compile Include="Services\INotificationBatchService.cs" />
     <Compile Include="Services\INotificationConverter.cs" />
     <Compile Include="Services\INotificationService.cs" />
