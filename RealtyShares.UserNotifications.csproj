@@ -101,7 +101,6 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Drivers\NotificationBatchPartDriver.cs" />
     <Compile Include="Drivers\NotificationRecipientsPartDriver.cs" />
-    <Compile Include="Extensions\ContentManagerExtensions.cs" />
     <Compile Include="Handlers\NotificationBatchPartHandler.cs" />
     <Compile Include="Handlers\NotificationsUserPartHandler.cs" />
     <Compile Include="Handlers\NotificationRecipientsPartHandler.cs" />
@@ -122,8 +121,10 @@
     <Compile Include="Services\NotificationsToUserDispatcher.cs" />
     <Compile Include="Services\UserNotificationsUpdater.cs" />
     <Compile Include="TheShiftHelpers.cs" />
+    <Compile Include="ViewModels\RecipientListsViewModel.cs" />
     <Compile Include="ViewModels\NotificationBatchListViewModel.cs" />
     <Content Include="Styles\realtyshares-usernotifications-notificationbatchlist.less" />
+    <Content Include="Views\Admin\ManageRecipientLists.cshtml" />
     <None Include="Views\Admin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,13 @@
 ﻿using Orchard;
 using Orchard.ContentManagement;
+using Orchard.Core.Common.Models;
+using Orchard.Core.Title.Models;
 using Orchard.Localization;
 using Orchard.Logging;
 using Orchard.Mvc;
 using Orchard.UI.Admin;
 using Orchard.UI.Navigation;
+using Orchard.UI.Notify;
 using RealtyShares.UserNotifications.Services;
 using RealtyShares.UserNotifications.ViewModels;
 using System;
@@ -17,6 +20,10 @@ namespace RealtyShares.UserNotifications.Controllers
     [Admin]
     public class AdminController : Controller, IUpdateModel
     {
+        private const int DefaultPageSizeForNotificationBatchList = 10;
+        private const int DefaultPageSizeForRecipientLists = 10;
+
+
         private readonly IContentManager _contentManager;
         private readonly IOrchardServices _orchardServices;
         private readonly INotificationBatchService _notificationBatchService;
@@ -39,7 +46,7 @@ namespace RealtyShares.UserNotifications.Controllers
         }
 
 
-        public ActionResult Index(int page = 1, int pageSize = 3)
+        public ActionResult Index(int page = 1, int pageSize = DefaultPageSizeForNotificationBatchList)
         {
             if (!_orchardServices.Authorizer.Authorize(Permissions.ManageNotifications))
             {
@@ -53,7 +60,7 @@ namespace RealtyShares.UserNotifications.Controllers
 
         [HttpPost, ActionName("Index")]
         [FormValueRequired("submit.Filter")]
-        public ActionResult Filter(NotificationBatchListViewModel viewModel)
+        public ActionResult FilterNotificationBatches(NotificationBatchListViewModel viewModel)
         {
             if (!_orchardServices.Authorizer.Authorize(Permissions.ManageNotifications))
             {
@@ -68,13 +75,93 @@ namespace RealtyShares.UserNotifications.Controllers
             return GetNotificationBatchListViewResult(notificationBatchItems);
         }
 
-        public ActionResult ManageRecipientLists()
+        public ActionResult ManageRecipientLists(int page = 1, int pageSize = DefaultPageSizeForRecipientLists)
         {
-            throw new NotImplementedException();
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageNotifications))
+            {
+                return new HttpUnauthorizedResult(T("You are not allowed to manage notifications.").Text);
+            }
+
+            var recipientLists = _contentManager
+                .Query(VersionOptions.Published, Constants.RecipientListContentType)
+                .OrderByDescending<TitlePartRecord>(record => record.Title)
+                .List();
+
+            return GetRecipientListViewResult(recipientLists, page, pageSize);
+        }
+
+        [HttpPost, ActionName("ManageRecipientLists")]
+        [FormValueRequired("submit.BulkAction")]
+        public ActionResult ManageRecepientListsBulkAction(RecipientListsViewModel viewModel)
+        {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageNotifications))
+            {
+                return new HttpUnauthorizedResult(T("You are not allowed to manage notifications.").Text);
+            }
+
+            var selectedEntries = viewModel.RecipientListEntries.Where(entry => entry.IsChecked);
+
+            if (selectedEntries.Any())
+            {
+                switch (viewModel.RecipientListBulkAction)
+                {
+                    case RecipientListBulkAction.None:
+                        break;
+                    case RecipientListBulkAction.Delete:
+                        {
+                            foreach (var entryItem in selectedEntries)
+                            {
+                                _contentManager.Remove(_contentManager.Get(entryItem.Id));
+                            }
+
+                            _orchardServices.Notifier.Add(NotifyType.Information, T("Items were successfully removed."));
+                        }
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            else
+            {
+                _orchardServices.Notifier.Add(NotifyType.Warning, T("Select a recipient list first."));
+            }
+
+            return RedirectToAction("ManageRecipientLists");
+        }
+
+        [HttpPost, ActionName("ManageRecipientLists")]
+        [FormValueRequired("submit.Filter")]
+        public ActionResult FilterRecipientLists(RecipientListsViewModel viewModel)
+        {
+            if (!_orchardServices.Authorizer.Authorize(Permissions.ManageNotifications))
+            {
+                return new HttpUnauthorizedResult(T("You are not allowed to manage notifications.").Text);
+            }
+
+            var recipientListItems = _contentManager
+                .Query(VersionOptions.Published, Constants.RecipientListContentType)
+                .OrderByDescending<TitlePartRecord>(record => record.Title)
+                .List();
+
+            switch (viewModel.RecipientListSortBy)
+            {
+                case  RecipientListSortBy.RecentlyCreatedDate: recipientListItems = recipientListItems.OrderByDescending(item => item.As<CommonPart>().CreatedUtc);
+                    break;
+                case RecipientListSortBy.RecentlyModifiedDate: recipientListItems = recipientListItems.OrderByDescending(item => item.As<CommonPart>().ModifiedUtc);
+                    break;
+                case RecipientListSortBy.Title:
+                    // It is already ordered by title.
+                    break;
+                default:
+                    break;
+            }
+
+            return GetRecipientListViewResult(recipientListItems, 1, viewModel.PageSize);
         }
 
 
-        private ActionResult GetNotificationBatchListViewResult(IEnumerable<ContentItem> notificationBatchItems, int page = 1, int pageSize = 3)
+        private ActionResult GetNotificationBatchListViewResult(IEnumerable<ContentItem> notificationBatchItems, int page = 1, int pageSize = DefaultPageSizeForNotificationBatchList)
         {
             var viewModel = new NotificationBatchListViewModel();
 
@@ -88,13 +175,42 @@ namespace RealtyShares.UserNotifications.Controllers
                 notificationBatchShapeList.AddRange(notificationBatchItems
                                                    .Skip(pager.GetStartIndex())
                                                    .Take(pager.PageSize)
-                                                   .Select(plan => _contentManager.BuildDisplay(plan, "SummaryAdmin")));
+                                                   .Select(item => _contentManager.BuildDisplay(item, "SummaryAdmin")));
 
                 viewModel.NotificationBatchShapes = notificationBatchShapeList;
                 viewModel.Pager = pagerShape;
             }
 
             return View("Index", viewModel);
+        }
+
+        private ActionResult GetRecipientListViewResult(IEnumerable<ContentItem> recipientLists, int page = 1, int pageSize = DefaultPageSizeForRecipientLists)
+        {
+            var viewModel = new RecipientListsViewModel();
+
+            if (recipientLists.Any())
+            {
+                var pager = new Pager(_orchardServices.WorkContext.CurrentSite, new PagerParameters { Page = page, PageSize = pageSize });
+
+                dynamic pagerShape = _orchardServices.New.Pager(pager).TotalItemCount(recipientLists.Count());
+
+                var recipientListEntryItems = new List<RecipientListEntry>();
+                recipientListEntryItems.AddRange(recipientLists
+                                                   .Skip(pager.GetStartIndex())
+                                                   .Take(pager.PageSize)
+                                                   .Select(item => new RecipientListEntry 
+                                                        { 
+                                                            Title = item.As<TitlePart>().Title, 
+                                                            IsChecked = false,
+                                                            Id = item.Id,
+                                                            ContentItem = item
+                                                        }));
+
+                viewModel.RecipientListEntries = recipientListEntryItems;
+                viewModel.Pager = pagerShape;
+            }
+
+            return View("ManageRecipientLists", viewModel);
         }
 
 

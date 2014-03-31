@@ -1,0 +1,119 @@
+﻿@model RealtyShares.UserNotifications.ViewModels.RecipientListsViewModel
+
+@{
+    Layout.Title = T("Recipient Lists");
+
+    
+    int recipientListIndex = 0, ri;
+
+    var selectListItemsForRecipientListsSortBy = new SelectListItem[]
+    {
+        new SelectListItem
+        {
+            Selected = true,
+            Text = T("Title").Text,
+            Value = RealtyShares.UserNotifications.ViewModels.RecipientListSortBy.Title.ToString()
+        },
+        new SelectListItem
+        {
+            Text = T("Recently Created Date").Text,
+            Value = RealtyShares.UserNotifications.ViewModels.RecipientListSortBy.RecentlyCreatedDate.ToString()
+        },
+        new SelectListItem
+        {
+            Text = T("Recently Modified Date").Text,
+            Value = RealtyShares.UserNotifications.ViewModels.RecipientListSortBy.RecentlyModifiedDate.ToString()
+        }
+    };
+
+    var selectListItemsForBulkAction = new SelectListItem[]
+    {
+        new SelectListItem
+        {
+            Selected = true,
+            Text = T("Choose action...").Text,
+            Value = RealtyShares.UserNotifications.ViewModels.RecipientListBulkAction.None.ToString()
+        },
+        new SelectListItem
+        {
+            Text = T("Delete").Text,
+            Value = RealtyShares.UserNotifications.ViewModels.RecipientListBulkAction.Delete.ToString()
+        }
+    };
+
+    var selectListITemsForPageSize = new SelectListItem[]
+    {
+        new SelectListItem { Text = T("All").Text, Value = Model.RecipientListEntries.Count.ToString() },
+        new SelectListItem { Text = "10", Value = 10.ToString(), Selected = true },
+        new SelectListItem { Text = "50", Value = 50.ToString() },
+        new SelectListItem { Text = "100", Value = 100.ToString() },
+    };
+}
+
+@using (Html.BeginFormAntiForgeryPost())
+{
+    <fieldset class="bulk-actions">
+        @Html.LabelFor(m => m.RecipientListBulkAction, T("Action:"))
+        @Html.DropDownListFor(m => m.RecipientListBulkAction, selectListItemsForBulkAction)
+
+        <button type="submit" name="submit.BulkAction" value="submit.BulkAction">@T("Apply")</button>
+
+        @Html.LabelFor(m => m.RecipientListSortBy, T("Sort By:"))
+        @Html.DropDownListFor(m => m.RecipientListSortBy, selectListItemsForRecipientListsSortBy)
+
+        @Html.LabelFor(m => m.PageSize, T("Show:"))
+        @Html.DropDownListFor(m => m.PageSize, selectListITemsForPageSize)
+    
+        <button type="submit" name="submit.Filter" value="submit.Filter">@T("Filter")</button>
+    </fieldset>
+    
+    @Html.ActionLink(T("Create New Recipient List").Text, "Create", "Admin", new { Area = "Contents", Id = RealtyShares.UserNotifications.Constants.RecipientListContentType }, new { @class = "manage button" })
+
+    
+    if (Model.RecipientListEntries != null && Model.RecipientListEntries.Any())
+    {
+        <fieldset>
+		    <table class="items" summary="@T("This is a table of the recipient lists.")">
+		    	<colgroup>
+		    		<col id="realtyshares-usernotifications-recipientlists-col1" />
+		    		<col id="realtyshares-usernotifications-recipientlists-col2" />
+		    		<col id="realtyshares-usernotifications-recipientlists-col3" />
+		    	</colgroup>
+		    	<thead>
+		    		<tr>
+		    			<th scope="col"><input type="checkbox" class="check-all"/></th>
+		    			<th scope="col">@T("Title")</th>
+		    			<th scope="col"></th>
+		    		</tr>
+		    	</thead>
+
+                @foreach (var recipientListEntry in Model.RecipientListEntries)
+                {
+                    ri = recipientListIndex;
+                    
+	        		<tr>
+	        			<td>
+	        				<input type="hidden" value="@Model.RecipientListEntries[recipientListIndex].Id" name="@Html.NameOf(m => m.RecipientListEntries[ri].Id)"/>
+                            <input type="checkbox" value="true" name="@Html.NameOf(m => m.RecipientListEntries[ri].IsChecked)"/>
+	        			</td>
+	        			<td>
+                            @Html.ItemEditLink(recipientListEntry.Title, recipientListEntry.ContentItem)
+	        			</td>
+	        			<td>
+	        			    @Html.ItemEditLink(T("Edit").Text, recipientListEntry.ContentItem) |
+	        			    @Html.ActionLink(T("Delete").Text, "Remove", "Admin", new { Area = "Contents", Id = recipientListEntry.Id, ReturnUrl = Request.RawUrl }, new { itemprop = "RemoveUrl UnsafeUrl"})
+	        			</td>
+	        		</tr>
+                    
+                    recipientListIndex++;
+                }
+            </table>
+        </fieldset>
+    
+        @Display(Model.Pager)
+    }
+    else
+    {
+        <h2>@("There are no recipient list to display.")</h2>
+    }
+}

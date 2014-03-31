@@ -1,8 +1,4 @@
 ﻿using Orchard.UI.Resources;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace RealtyShares.UserNotifications
 {
@@ -12,9 +8,10 @@ namespace RealtyShares.UserNotifications
         {
             var manifest = builder.Add();
 
+
             manifest.DefineStyle("RealtyShares.UserNotifications.NotificationBatchList")
                 .SetUrl("realtyshares-usernotifications-notificationbatchlist.css")
-                .SetDependencies("jQueryUI_DatePicker"); 
+                .SetDependencies("jQueryUI_DatePicker");
         }
     }
 }
