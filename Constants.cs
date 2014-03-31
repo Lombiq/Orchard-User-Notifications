@@ -19,5 +19,10 @@ namespace RealtyShares.UserNotifications
         /// Technical name of the Recipient List content type.
         /// </summary>
         public const string RecipientListContentType = "RecipientList";
+
+        /// <summary>
+        /// Technical name of the Notification Widget content type.
+        /// </summary>
+        public const string NotificationWidgetContentType = "NotificationWidget";
     }
 }

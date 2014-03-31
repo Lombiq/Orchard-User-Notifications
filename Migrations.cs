@@ -34,6 +34,14 @@ namespace RealtyShares.UserNotifications
                     .WithPart(typeof(NotificationRecipientsPart).Name)
                 );
 
+            ContentDefinitionManager.AlterTypeDefinition(Constants.NotificationWidgetContentType,
+                cfg => cfg
+                    .WithPart("WidgetPart")
+                    .WithPart("CommonPart")
+                    .WithPart(typeof(NotificationWidgetPart).Name)
+                    .WithSetting("Stereotype", "Widget")
+                );
+
 
             return 1;
         }

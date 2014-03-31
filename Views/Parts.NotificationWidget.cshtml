@@ -1,0 +1,18 @@
+﻿@using Orchard.ContentManagement;
+@using RealtyShares.UserNotifications.Models;
+
+@{
+    Style.Require("RealtyShares.UserNotifications.NotificationWidget");
+    
+    
+    var notifications = Model.ContentPart.UnreadNotifications as IList<INotification>;
+}
+
+@foreach (var notification in notifications)
+{
+    <div class="realtyshares-usernotifications-notificationwidget-notification">
+        <div class="realtyshares-usernotifications-notificationwidget-remove" data-id="@notification.Id"></div>
+        <div class="realtyshares-usernotifications-notificationwidget-title">@notification.Title</div>
+        <div class="realtyshares-usernotifications-notificationwidget-body">@notification.Body</div>
+    </div>
+}

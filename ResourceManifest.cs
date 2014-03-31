@@ -8,10 +8,13 @@ namespace RealtyShares.UserNotifications
         {
             var manifest = builder.Add();
 
-
+            
             manifest.DefineStyle("RealtyShares.UserNotifications.NotificationBatchList")
                 .SetUrl("realtyshares-usernotifications-notificationbatchlist.css")
                 .SetDependencies("jQueryUI_DatePicker");
+
+            manifest.DefineStyle("RealtyShares.UserNotifications.NotificationWidget")
+                .SetUrl("realtyshares-usernotifications-notificationwidget.css");
         }
     }
 }

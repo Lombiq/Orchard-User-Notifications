@@ -67,6 +67,9 @@
     <Content Include="Styles\realtyshares-usernotifications-notificationbatchlist.css">
       <DependentUpon>realtyshares-usernotifications-notificationbatchlist.less</DependentUpon>
     </Content>
+    <Content Include="Styles\realtyshares-usernotifications-notificationwidget.css">
+      <DependentUpon>realtyshares-usernotifications-notificationwidget.less</DependentUpon>
+    </Content>
     <Content Include="Web.config" />
     <Content Include="Scripts\Web.config" />
     <Content Include="Styles\Web.config" />
@@ -101,14 +104,17 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Drivers\NotificationBatchPartDriver.cs" />
     <Compile Include="Drivers\NotificationRecipientsPartDriver.cs" />
+    <Compile Include="Drivers\NotificationWidgetPartDriver.cs" />
     <Compile Include="Handlers\NotificationBatchPartHandler.cs" />
     <Compile Include="Handlers\NotificationsUserPartHandler.cs" />
     <Compile Include="Handlers\NotificationRecipientsPartHandler.cs" />
+    <Compile Include="Handlers\NotificationWidgetPartHandler.cs" />
     <Compile Include="Migrations.cs" />
     <Compile Include="Models\INotification.cs" />
     <Compile Include="Models\NotificationBatchPart.cs" />
     <Compile Include="Models\NotificationsUserPart.cs" />
     <Compile Include="Models\NotificationRecipientsPart.cs" />
+    <Compile Include="Models\NotificationWidgetPart.cs" />
     <Compile Include="Permissions.cs" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Services\RecipientListService.cs" />
@@ -127,7 +133,9 @@
     <Compile Include="ViewModels\NotificationBatchListViewModel.cs" />
     <Content Include="Styles\realtyshares-usernotifications-notificationbatchlist.less" />
     <Content Include="Views\Admin\ManageRecipientLists.cshtml" />
+    <Content Include="Styles\realtyshares-usernotifications-notificationwidget.less" />
     <None Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Parts.NotificationWidget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Placement.info">

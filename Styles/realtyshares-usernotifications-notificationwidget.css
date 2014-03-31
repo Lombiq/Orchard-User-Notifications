@@ -1,0 +1,19 @@
+.realtyshares-usernotifications-notificationwidget-notification {
+  margin: 10px 0 4px 0;
+  padding: 8px;
+  clear: both;
+  background: #fdf5bc;
+  border: 1px solid #ffea9b;
+}
+.realtyshares-usernotifications-notificationwidget-notification .realtyshares-usernotifications-notificationwidget-title {
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+.realtyshares-usernotifications-notificationwidget-notification .realtyshares-usernotifications-notificationwidget-remove {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAQAAABuBnYAAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAJiS0dEAP+Hj8y/AAAACXBIWXMAAABIAAAASABGyWs+AAAAS0lEQVQI12XNsQ2AIAAAwYtxBxhACxo3MHFtx6CgkcYBmIAGe/kB7uFygMMFp66Koqo7V81rd2NTNQiKYSgCi6nkMWTZ8EgT6r/9AHsMGHhgpEogAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE0LTAzLTMxVDE5OjQ1OjIwLTA0OjAwLwigHAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNC0wMy0zMVQxOTo0NToyMC0wNDowMF5VGKAAAAAZdEVYdFNvZnR3YXJlAEFkb2JlIEltYWdlUmVhZHlxyWU8AAAAAElFTkSuQmCC);
+  width: 8px;
+  height: 8px;
+  margin: 4px;
+  float: right;
+  cursor: pointer;
+}
