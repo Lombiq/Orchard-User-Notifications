@@ -4,6 +4,7 @@ using Orchard.Localization;
 using Orchard.Logging;
 using RealtyShares.UserNotifications.Models;
 using System.Web.Mvc;
+using System.Linq;
 
 namespace RealtyShares.UserNotifications.Controllers
 {
@@ -36,22 +37,16 @@ namespace RealtyShares.UserNotifications.Controllers
                 return false;
             }
 
-            var notificationBatch = _contentManager.Get(id);
-
-            if (notificationBatch == null)
-            {
-                return false;
-            }
-
-            if (notificationBatch.ContentType != Constants.NotificationBatchContentType)
-            {
-                return false;
-            }
-
-            var notificationUserPart = _wca.GetContext().CurrentUser.As<NotificationsUserPart>();
-
             // Commented out for testing purposes.
-            //notificationUserPart.LastProcessedNotificationId = id;
+            //var notificationUserPart = _wca.GetContext().CurrentUser.As<NotificationsUserPart>();
+            //var relevantNotificationEntry = notificationUserPart.RecentNotificationEntries.FirstOrDefault(entry => entry.NotificationId == id);
+
+            //if (relevantNotificationEntry == null)
+            //{
+            //    return false;
+            //}
+
+            //relevantNotificationEntry.IsRead = true;
 
             return true;
         }
