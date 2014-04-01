@@ -2,10 +2,14 @@
 @using RealtyShares.UserNotifications.Models;
 
 @{
+    Script.Require("jQuery");
+    
+    
     Style.Require("RealtyShares.UserNotifications.NotificationWidget");
     
     
     var notifications = Model.ContentPart.UnreadNotifications as IList<INotification>;
+    var removeLink = Url.Action("RemoveNotification", "NotificationWidget", new { Area = "RealtyShares.UserNotifications" });
 }
 
 @foreach (var notification in notifications)
@@ -15,4 +19,34 @@
         <div class="realtyshares-usernotifications-notificationwidget-title">@notification.Title</div>
         <div class="realtyshares-usernotifications-notificationwidget-body">@notification.Body</div>
     </div>
+}
+
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        (function ($) {
+            $(function () {
+                $('.realtyshares-usernotifications-notificationwidget-remove').click(function () {
+                    var notificationId = $(this).attr('data-id');
+                    var parentElement = $(this).parent();
+                    var requestVerificationToken = '@Html.AntiForgeryTokenValueOrchard()';
+
+                    $.post("@removeLink", { __RequestVerificationToken: requestVerificationToken, id: notificationId })
+                    .done(function (successValue) {
+                        var success = successValue === "True";
+
+                        if (success) {
+                            parentElement.remove();
+                        } else {
+                            alert('@T("Remove notification failed to remove.")');
+                        }
+                    })
+                    .fail(function () {
+                        alert('@T("Remove notification failed to remove because of server error.")');
+                    })
+                })
+            });
+        })(jQuery);
+    </script>
 }

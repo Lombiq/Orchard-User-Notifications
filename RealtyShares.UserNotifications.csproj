@@ -102,6 +102,7 @@
     <Compile Include="AdminMenu.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\NotificationWidgetController.cs" />
     <Compile Include="Drivers\NotificationBatchPartDriver.cs" />
     <Compile Include="Drivers\NotificationRecipientsPartDriver.cs" />
     <Compile Include="Drivers\NotificationWidgetPartDriver.cs" />
