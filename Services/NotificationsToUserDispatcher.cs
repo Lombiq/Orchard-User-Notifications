@@ -61,10 +61,10 @@ namespace RealtyShares.UserNotifications.Services
             }
         }
 
-        public IEnumerable<INotification> GetRecentNotificationsForUser(IUser user, int count)
+        public IEnumerable<INotification> GetRecentNotificationsForUser(IUser user, int maxCount)
         {
             return _contentManager
-                .GetMany<IContent>(GetNotificationsUserPartOrThrow(user).RecentNotificationEntries.Take(count).Select(entry => entry.NotificationId), VersionOptions.Published, QueryHints.Empty)
+                .GetMany<IContent>(GetNotificationsUserPartOrThrow(user).RecentNotificationEntries.Take(maxCount).Select(entry => entry.NotificationId), VersionOptions.Published, QueryHints.Empty)
                 .Select(notificationBatch => _notificationConverter.ConvertBatchToNotification(notificationBatch, user));
         }
 

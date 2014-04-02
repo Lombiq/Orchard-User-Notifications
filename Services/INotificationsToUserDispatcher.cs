@@ -13,7 +13,19 @@ namespace RealtyShares.UserNotifications.Services
     /// </summary>
     public interface INotificationsToUserDispatcher : IDependency
     {
+        /// <summary>
+        /// Updates the notifications that are accessible for a user, processing the given amount of notifications.
+        /// </summary>
+        /// <param name="user">The user to update the notifications for.</param>
+        /// <param name="maxNotificationBatchCountToCheck">The amount of notification batches to check for retrieving the ones where the user is a recipient.</param>
         void UpdateNotificationsForUser(IUser user, int maxNotificationBatchCountToCheck);
-        IEnumerable<INotification> GetRecentNotificationsForUser(IUser user, int count);
+
+        /// <summary>
+        /// Retrieves the recent notifications of the users, as persisted in the user object.
+        /// </summary>
+        /// <param name="user">The user to retrieve the notifications for.</param>
+        /// <param name="maxCount">The maximal number of notifications to retrieve.</param>
+        /// <returns>The fetched notifications.</returns>
+        IEnumerable<INotification> GetRecentNotificationsForUser(IUser user, int maxCount);
     }
 }
