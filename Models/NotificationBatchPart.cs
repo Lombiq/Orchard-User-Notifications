@@ -6,6 +6,7 @@ using Orchard.ContentManagement;
 using Orchard.Core.Common.Models;
 using Orchard.Core.Common.Utilities;
 using Orchard.Core.Title.Models;
+using Orchard.Roles.Models;
 using Orchard.Security;
 
 namespace RealtyShares.UserNotifications.Models
@@ -43,10 +44,24 @@ namespace RealtyShares.UserNotifications.Models
             set { _recipientsType.Value = value; }
         }
 
+        private readonly LazyField<IEnumerable<RoleRecord>> _availableRoles = new LazyField<IEnumerable<RoleRecord>>();
+        internal LazyField<IEnumerable<RoleRecord>> AvailableRolesField { get { return _availableRoles; } }
+        public IEnumerable<RoleRecord> AvailableRoles { get { return _availableRoles.Value; } }
+
         public int RecipientsRoleId
         {
             get { return this.Retrieve(x => x.RecipientsRoleId); }
             set { this.Store(x => x.RecipientsRoleId, value); }
+        }
+
+        private readonly LazyField<IEnumerable<IContent>> _availableRecipientLists = new LazyField<IEnumerable<IContent>>();
+        internal LazyField<IEnumerable<IContent>> AvailableRecipientListsField { get { return _availableRecipientLists; } }
+        public IEnumerable<IContent> AvailableRecipientLists { get { return _availableRecipientLists.Value; } }
+
+        public int RecipientListId
+        {
+            get { return this.Retrieve(x => x.RecipientListId); }
+            set { this.Store(x => x.RecipientListId, value); }
         }
 
         private readonly LazyField<IContent> _recipientList = new LazyField<IContent>();

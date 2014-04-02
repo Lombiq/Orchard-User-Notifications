@@ -1,1 +1,7 @@
-﻿
+﻿@model RealtyShares.UserNotifications.Models.NotificationRecipientsPart
+
+<fieldset class="user-notifications-notification-recipients">
+    @Html.LabelFor(m => m.RecipientNames, T("Usernames"))
+    @Html.TextAreaFor(m => m.RecipientNames, new { @class = "text large" })
+    <span class="hint">@T("A comma-delimited list of recipient usernames.")</span>
+</fieldset>

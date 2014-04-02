@@ -11,6 +11,7 @@ using Orchard.Security;
 using Orchard.Roles.Models;
 using Orchard.Data;
 using Orchard.Users.Models;
+using Orchard.Roles.Services;
 
 namespace RealtyShares.UserNotifications.Handlers
 {
@@ -21,6 +22,7 @@ namespace RealtyShares.UserNotifications.Handlers
     {
         public NotificationBatchPartHandler(
             IContentManager contentManager,
+            Lazy<IRoleService> roleServiceLazy,
             Lazy<IRepository<UserRolesPartRecord>> userRolesRepositoryLazy)
         {
             OnActivated<NotificationBatchPart>((context, part) =>
@@ -38,12 +40,15 @@ namespace RealtyShares.UserNotifications.Handlers
                         return recipientsType;
                     });
 
-                part.RecipientListField.Loader(() => contentManager.Get(part.Retrieve<int>("RecipientListId")));
-                
+                part.AvailableRolesField.Loader(() => roleServiceLazy.Value.GetRoles());
+
+                part.RecipientListField.Loader(() => contentManager.Get(part.RecipientListId));
+
+                part.AvailableRecipientListsField.Loader(() => contentManager.Query(Constants.RecipientListContentType).List());
+
                 part.RecipientListField.Setter(recipientsList =>
                     {
-                        var recipientsListId = recipientsList != null ? recipientsList.ContentItem.Id : 0;
-                        part.Store("RecipientListId", recipientsListId);
+                        part.RecipientListId = recipientsList != null ? recipientsList.ContentItem.Id : 0;
                         return recipientsList;
                     });
 

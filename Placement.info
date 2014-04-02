@@ -1,5 +1,9 @@
 ﻿<Placement>
   <Place Parts_NotificationRecipients_Edit="Content:5"
          Parts_NotificationBatch_Edit="Content:before.1"
-         Parts_NotificationWidget="Content:5"/>
+         Parts_NotificationWidget="Content:5" />
+
+  <Match ContentType="NotificationBatch">
+    <Place Parts_NotificationRecipients_Edit="Content:before.2" />
+  </Match>
 </Placement>

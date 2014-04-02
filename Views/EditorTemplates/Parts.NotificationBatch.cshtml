@@ -1,23 +1,64 @@
 ﻿@model RealtyShares.UserNotifications.Models.NotificationBatchPart
 @using RealtyShares.UserNotifications.Models
+@using Orchard.ContentManagement
+
+@{
+    Script.Require("jQuery").AtFoot();
+    var roles = Model.AvailableRoles.Select(role => new SelectListItem { Text = role.Name, Value = role.Id.ToString() });
+    var recipientLists = Model.AvailableRecipientLists
+        .Select(list => new SelectListItem
+        {
+            Text = list.As<Orchard.ContentManagement.Aspects.ITitleAspect>().Title,
+            Value = list.ContentItem.Id.ToString()
+        });
+}
 
 <fieldset>
-    <label>@T("Send to")</label>
-    <ul>
+    <legend>@T("Send to")</legend>
+    <ol>
         <li>
             <input type="radio" value="Role" @if (Model.RecipientsType == NotificationBatchRecipientsType.Role)
                                              { <text>checked="checked"</text> } name="@Html.FieldNameFor(m => m.RecipientsType)" id="@Html.FieldIdFor(m => m.RecipientsType)_Role" />
             <label class="forcheckbox" for="@Html.FieldIdFor(m => m.RecipientsType)_Role">@T("Role")</label>
+            @Html.DropDownListFor(m => m.RecipientsRoleId, roles)
         </li>
         <li>
             <input type="radio" value="RecipientList" @if (Model.RecipientsType == NotificationBatchRecipientsType.RecipientList)
                                                       { <text>checked="checked"</text> } name="@Html.FieldNameFor(m => m.RecipientsType)" id="@Html.FieldIdFor(m => m.RecipientsType)_RecipientList" />
             <label class="forcheckbox" for="@Html.FieldIdFor(m => m.RecipientsType)_RecipientList">@T("Recipient List")</label>
+            @if (recipientLists.Any())
+            {
+                @Html.DropDownListFor(m => m.RecipientListId, recipientLists)
+            }
+
+            @Html.ActionLink(T("Create New Recipient List").Text, "Create", "Admin", new { Area = "Contents", Id = RealtyShares.UserNotifications.Constants.RecipientListContentType }, new { })
         </li>
         <li>
             <input type="radio" value="AdhocRecipients" @if (Model.RecipientsType == NotificationBatchRecipientsType.AdhocRecipients)
                                                         { <text>checked="checked"</text> } name="@Html.FieldNameFor(m => m.RecipientsType)" id="@Html.FieldIdFor(m => m.RecipientsType)_AdhocRecipients" />
             <label class="forcheckbox" for="@Html.FieldIdFor(m => m.RecipientsType)_AdhocRecipients">@T("Adhoc recipients (usernames)")</label>
         </li>
-    </ul>
+    </ol>
 </fieldset>
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        (function ($) {
+            $(function () {
+                var $recipientsRadioButtons = $("input:radio[name='@Html.FieldNameFor(m => m.RecipientsType)']");
+                var $adhocRecipientsRadio = $("#@Html.FieldIdFor(m => m.RecipientsType)_AdhocRecipients");
+
+                var checkAdhocRecipientsSelected = function () {
+                    var $recipientsContainer = $(".user-notifications-notification-recipients");
+
+                    if ($adhocRecipientsRadio.is(':checked')) $recipientsContainer.show();
+                    else $recipientsContainer.hide();
+                }
+
+                checkAdhocRecipientsSelected();
+                $recipientsRadioButtons.change(checkAdhocRecipientsSelected);
+            });
+        })(jQuery);
+    </script>
+}

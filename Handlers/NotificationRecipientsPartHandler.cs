@@ -48,14 +48,17 @@ namespace RealtyShares.UserNotifications.Handlers
                 
                 part.RecipientNamesField.Setter(names =>
                     {
+                        if (string.IsNullOrEmpty(names)) return names;
+
                         var namesArray = names
                             .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                            .Select(name => name.Trim())
+                            .Select(name => name.Trim().ToLowerInvariant())
                             .ToArray();
 
+                        // To be very thoughtful this could use IMembershipService instead, but that would mean n queries instead of 1.
                         part.Recipients = contentManager
                             .Query("User")
-                            .Where<UserPartRecord>(record => namesArray.Contains(record.UserName))
+                            .Where<UserPartRecord>(record => namesArray.Contains(record.NormalizedUserName))
                             .List<IUser>();
 
                         return names;
