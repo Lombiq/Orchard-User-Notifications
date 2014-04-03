@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 namespace RealtyShares.UserNotifications.Services
 {
+    /// <summary>
+    /// Queries Notification Batches with the given parameters.
+    /// </summary>
     public interface INotificationBatchService : IDependency
     {
         IEnumerable<ContentItem> GetNotificationBatches();

@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace RealtyShares.UserNotifications.Services
 {
+    /// <summary>
+    /// Queries Recipient Lists with the given parameters.
+    /// </summary>
     public interface IRecipientListService : IDependency
     {
         IEnumerable<ContentItem> GetRecipientLists();
