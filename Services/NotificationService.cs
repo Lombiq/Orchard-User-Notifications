@@ -44,8 +44,8 @@ namespace RealtyShares.UserNotifications.Services
                 .Query(VersionOptions.Published, Constants.NotificationBatchContentType)
                 .OrderByDescending<CommonPartRecord>(record => record.Id)
                 .Slice(maxNotificationBatchCountToCheck)
-                .Select(notification => notification.As<NotificationRecipientsPart>())
-                .Where(notification => notification.RecipientIds.Contains(recipient.ContentItem.Id))
+                .Select(notification => notification.As<NotificationBatchPart>())
+                .Where(notification => notification.ActualRecipientIds.Contains(recipient.ContentItem.Id))
                 .Select(notification => _notificationConverter.ConvertBatchToNotification(notification, recipient));
         }
     }

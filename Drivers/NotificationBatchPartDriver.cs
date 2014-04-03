@@ -12,7 +12,6 @@ namespace RealtyShares.UserNotifications.Drivers
     {
         protected override DriverResult Editor(NotificationBatchPart part, dynamic shapeHelper)
         {
-            var sdf = part.ActualRecipientIds;
             return ContentShape("Parts_NotificationBatch_Edit",
                 () => shapeHelper.EditorTemplate(
                     TemplateName: "Parts.NotificationBatch",

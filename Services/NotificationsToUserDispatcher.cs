@@ -24,16 +24,16 @@ namespace RealtyShares.UserNotifications.Services
             _contentManager = contentManager;
             _notificationConverter = notificationConverter;
         }
-        
-    
+
+
         public void UpdateNotificationsForUser(IUser user, int maxNotificationBatchCountToCheck)
         {
             var notificationsUserPart = GetNotificationsUserPartOrThrow(user);
 
-            var uncheckedNotificationCount = _contentManager
+            var uncheckedNotificationsQuery = _contentManager
                 .Query(VersionOptions.Published, Constants.NotificationBatchContentType)
-                .Where<CommonPartRecord>(record => record.Id > notificationsUserPart.LastProcessedNotificationId)
-                .Count();
+                .Where<CommonPartRecord>(record => record.Id > notificationsUserPart.LastProcessedNotificationId);
+            var uncheckedNotificationCount = uncheckedNotificationsQuery.Count();
 
             var notifications = _notificationService.FetchNotifications(user, Math.Min(uncheckedNotificationCount, maxNotificationBatchCountToCheck));
 
@@ -49,9 +49,13 @@ namespace RealtyShares.UserNotifications.Services
             }
             notificationsUserPart.RecentNotificationEntries = existingUserNotificationEntries.Take(maxNotificationBatchCountToCheck);
 
-            if (notifications.Any())
+            var topNotification = uncheckedNotificationsQuery
+                .OrderByDescending<CommonPartRecord>(record => record.Id)
+                .Slice(1)
+                .SingleOrDefault();
+            if (topNotification != null)
             {
-                notificationsUserPart.LastProcessedNotificationId = notifications.First().ContentItem.Id;
+                notificationsUserPart.LastProcessedNotificationId = topNotification.Id; 
             }
         }
 

@@ -56,10 +56,10 @@ namespace RealtyShares.UserNotifications.Filters
 
             var notificationsUserPart = user.As<NotificationsUserPart>();
             // Not checking if CheckIntervalMinutes hasn't passed yet since the last update.
-            //if (notificationsUserPart.LastCheckedUtc >= _clock.UtcNow.AddMinutes(-1 * Constants.NewNotificationCheckIntervalMinutes))
-            //{
-            //    return;
-            //}
+            if (notificationsUserPart.LastCheckedUtc >= _clock.UtcNow.AddMinutes(-1 * Constants.NewNotificationCheckIntervalMinutes))
+            {
+                return;
+            }
 
             notificationsUserPart.LastCheckedUtc = _clock.UtcNow;
 
