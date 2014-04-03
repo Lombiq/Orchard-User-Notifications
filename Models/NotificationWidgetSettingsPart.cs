@@ -14,7 +14,7 @@ namespace RealtyShares.UserNotifications.Models
     {
         public int NotificationCount
         {
-            get { return this.Retrieve(x => x.NotificationCount); }
+            get { return this.Retrieve(x => x.NotificationCount, 10); }
             set { this.Store(x => x.NotificationCount, value); }
         }
     }

@@ -18,7 +18,7 @@ namespace RealtyShares.UserNotifications.Handlers
     /// </summary>
     public class NotificationsUserPartHandler : ContentHandler
     {
-        public NotificationsUserPartHandler(Lazy<IJsonConverter> jsonConverterLazy, Lazy<INotificationsToUserDispatcher> notificationDispatcherLazy)
+        public NotificationsUserPartHandler(IJsonConverter jsonConverter, Lazy<INotificationsToUserDispatcher> notificationDispatcherLazy)
         {
             Filters.Add(new ActivatingFilter<NotificationsUserPart>("User"));
 
@@ -28,13 +28,13 @@ namespace RealtyShares.UserNotifications.Handlers
                     {
                         var serializedEntries = part.Retrieve<string>("RecentNotificationEntriesSerialized");
                         if (string.IsNullOrEmpty(serializedEntries)) return Enumerable.Empty<NotificationUserEntry>();
-                        return jsonConverterLazy.Value.Deserialize<IEnumerable<NotificationUserEntry>>(serializedEntries);
+                        return jsonConverter.Deserialize<IEnumerable<NotificationUserEntry>>(serializedEntries);
                     });
 
                 part.RecentNotificationEntriesField.Setter(entries =>
                     {
                         Argument.ThrowIfNull(entries, "entries");
-                        part.Store<string>("RecentNotificationEntriesSerialized", jsonConverterLazy.Value.Serialize(entries));
+                        part.Store<string>("RecentNotificationEntriesSerialized", jsonConverter.Serialize(entries));
                         return entries;
                     });
             });

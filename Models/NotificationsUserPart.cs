@@ -26,6 +26,12 @@ namespace RealtyShares.UserNotifications.Models
     /// </remarks>
     public class NotificationsUserPart : ContentPart
     {
+        public DateTime LastCheckedUtc
+        {
+            get { return this.Retrieve(x => x.LastCheckedUtc); }
+            set { this.Store(x => x.LastCheckedUtc, value); }
+        }
+
         public int LastProcessedNotificationId
         {
             get { return this.Retrieve(x => x.LastProcessedNotificationId); }

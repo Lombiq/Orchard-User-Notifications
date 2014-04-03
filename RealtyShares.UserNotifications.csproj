@@ -46,6 +46,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\lib\nhibernate\NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.ComponentModel.DataAnnotations">
@@ -107,6 +111,8 @@
     <Compile Include="Drivers\NotificationRecipientsPartDriver.cs" />
     <Compile Include="Drivers\NotificationWidgetPartDriver.cs" />
     <Compile Include="Drivers\NotificationWidgetSettingsPartDriver.cs" />
+    <Compile Include="Events\IUserNotificationsUpdaterEventHandler.cs" />
+    <Compile Include="Filters\UserNotificationsUpdaterFilter.cs" />
     <Compile Include="Handlers\NotificationBatchPartHandler.cs" />
     <Compile Include="Handlers\NotificationsUserPartHandler.cs" />
     <Compile Include="Handlers\NotificationRecipientsPartHandler.cs" />
@@ -131,7 +137,7 @@
     <Compile Include="Services\NotificationConverter.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\NotificationsToUserDispatcher.cs" />
-    <Compile Include="Services\UserNotificationsUpdater.cs" />
+    <Compile Include="Events\UserNotificationsUpdaterEventHandler.cs" />
     <Compile Include="TheShiftHelpers.cs" />
     <Compile Include="ViewModels\RecipientListsViewModel.cs" />
     <Compile Include="ViewModels\NotificationBatchListViewModel.cs" />

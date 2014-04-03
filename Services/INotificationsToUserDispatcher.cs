@@ -25,7 +25,8 @@ namespace RealtyShares.UserNotifications.Services
         /// </summary>
         /// <param name="user">The user to retrieve the notifications for.</param>
         /// <param name="maxCount">The maximal number of notifications to retrieve.</param>
+        /// <param name="justUnread">If true, will only return unread notifications.</param>
         /// <returns>The fetched notifications.</returns>
-        IEnumerable<INotification> GetRecentNotificationsForUser(IUser user, int maxCount);
+        IEnumerable<INotification> GetRecentNotificationsForUser(IUser user, int maxCount, bool justUnread);
     }
 }

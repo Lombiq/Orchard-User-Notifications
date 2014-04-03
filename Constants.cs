@@ -24,5 +24,15 @@ namespace RealtyShares.UserNotifications
         /// Technical name of the Notification Widget content type.
         /// </summary>
         public const string NotificationWidgetContentType = "NotificationWidget";
+
+        /// <summary>
+        /// How many notification batches to check at max when trying to retrieve the latest notifications for a user.
+        /// </summary>
+        public const int MaxNotificationBatchCountToCheck = 100;
+
+        /// <summary>
+        /// What the interval should be (in minutes) between checking for new notifications for a logged in user.
+        /// </summary>
+        public const int NewNotificationCheckIntervalMinutes = 10;
     }
 }

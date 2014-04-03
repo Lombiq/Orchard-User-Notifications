@@ -23,7 +23,7 @@ namespace RealtyShares.UserNotifications.Services
         public IEnumerable<ContentItem> GetNotificationBatches()
         {
             var notificationBatchItems = _contentManager
-                .Query(VersionOptions.AllVersions, Constants.NotificationBatchContentType)
+                .Query(VersionOptions.Latest, Constants.NotificationBatchContentType)
                 .OrderByDescending<CommonPartRecord>(record => record.Id)
                 .List();
 

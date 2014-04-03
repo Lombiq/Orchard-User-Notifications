@@ -27,7 +27,9 @@ namespace RealtyShares.UserNotifications.Handlers
                         }
 
                         var notificationCount = siteService.GetSiteSettings().As<NotificationWidgetSettingsPart>().NotificationCount;
-                        var unreadNotifications = notificationDispatcher.GetRecentNotificationsForUser(wca.GetContext().CurrentUser, notificationCount).ToList();
+                        var unreadNotifications = notificationDispatcher
+                            .GetRecentNotificationsForUser(currentUser, notificationCount, true)
+                            .ToList();
 
                         return unreadNotifications;
                     });

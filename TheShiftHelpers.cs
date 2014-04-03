@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using Orchard.ContentManagement.FieldStorage.InfosetStorage;
 using Orchard.Utility;
 using System.Linq;
+using Orchard.ContentManagement.Records;
 
 namespace Orchard.ContentManagement
 {
@@ -243,7 +244,9 @@ namespace Orchard.ContentManagement
             }
 
             if (type == typeof(int) ||
-                type == typeof(int?))
+                type == typeof(int?) ||
+                type == typeof(long) ||
+                type == typeof(long?))
             {
 
                 return Convert.ToInt64(value).ToString(CultureInfo.InvariantCulture);
@@ -334,6 +337,10 @@ namespace Orchard.ContentManagement
             if (type == typeof(int) || type == typeof(int?))
             {
                 return (T)(object)int.Parse(value, CultureInfo.InvariantCulture);
+            }
+            if (type == typeof(long) || type == typeof(long?))
+            {
+                return (T)(object)long.Parse(value, CultureInfo.InvariantCulture);
             }
             if (type == typeof(bool) || type == typeof(bool?))
             {
@@ -455,6 +462,7 @@ namespace Orchard.ContentManagement
 
         public static TProperty Retrieve<TPart, TProperty>(this TPart contentPart,
             Expression<Func<TPart, TProperty>> targetExpression,
+            TProperty defaultValue = default(TProperty),
             bool versioned = false) where TPart : ContentPart
         {
 
@@ -466,7 +474,8 @@ namespace Orchard.ContentManagement
                 ? null
                 : (versioned ? infosetPart.VersionInfoset.Element : infosetPart.Infoset.Element)
                 .Element(contentPart.GetType().Name);
-            return el == null ? default(TProperty) : el.Attr<TProperty>(name);
+            var attr = el != null ? el.Attribute(name) : default(XAttribute);
+            return attr == null ? defaultValue : XmlHelper.Parse<TProperty>(attr.Value);
         }
 
         public static TProperty Retrieve<TProperty>(this ContentPart contentPart, string name,
@@ -478,6 +487,55 @@ namespace Orchard.ContentManagement
                 : (versioned ? infosetPart.VersionInfoset.Element : infosetPart.Infoset.Element)
                 .Element(contentPart.GetType().Name);
             return el == null ? default(TProperty) : el.Attr<TProperty>(name);
+        }
+
+        public static TProperty Retrieve<TPart, TRecord, TProperty>(this TPart contentPart,
+            Expression<Func<TRecord, TProperty>> targetExpression)
+            where TPart : ContentPart<TRecord>
+        {
+
+            var getter = ReflectionHelper<TRecord>.GetGetter(targetExpression);
+            return contentPart.Retrieve(targetExpression, getter);
+        }
+
+        public static TProperty Retrieve<TPart, TRecord, TProperty>(this TPart contentPart,
+            Expression<Func<TRecord, TProperty>> targetExpression,
+            Delegate defaultExpression)
+            where TPart : ContentPart<TRecord>
+        {
+
+            var propertyInfo = ReflectionHelper<TRecord>.GetPropertyInfo(targetExpression);
+            var name = propertyInfo.Name;
+
+            var infosetPart = contentPart.As<InfosetPart>();
+            var versioned = typeof(ContentPartVersionRecord).IsAssignableFrom(typeof(TRecord));
+
+            if (infosetPart == null)
+            {
+                // Property has never been stored. Get it from the default expression and store that.
+                var defaultValue = defaultExpression == null
+                    ? default(TProperty)
+                    : (TProperty)defaultExpression.DynamicInvoke(contentPart.Record);
+                contentPart.Store(name, defaultValue, versioned);
+                return defaultValue;
+            }
+            else
+            {
+                var infoset = versioned ? infosetPart.VersionInfoset.Element : infosetPart.Infoset.Element;
+                var el = infoset.Element(contentPart.GetType().Name);
+
+                if (el == null || el.Attribute(name) == null)
+                {
+                    var defaultValue = defaultExpression == null
+                        ? default(TProperty)
+                        : (TProperty)defaultExpression.DynamicInvoke(contentPart.Record);
+
+                    contentPart.Store(name, defaultValue, versioned);
+                    return defaultValue;
+                }
+
+                return el.Attr<TProperty>(name);
+            }
         }
 
         public static void Store<TPart, TProperty>(this TPart contentPart,
@@ -516,40 +574,6 @@ namespace Orchard.ContentManagement
             partElement.Attr(name, value);
         }
 
-        public static TProperty Retrieve<TPart, TRecord, TProperty>(this TPart contentPart,
-            Expression<Func<TRecord, TProperty>> targetExpression)
-            where TPart : ContentPart<TRecord>
-        {
-
-            var getter = ReflectionHelper<TRecord>.GetGetter(targetExpression);
-            return contentPart.Retrieve(targetExpression, getter);
-        }
-
-        public static TProperty Retrieve<TPart, TRecord, TProperty>(this TPart contentPart,
-            Expression<Func<TRecord, TProperty>> targetExpression,
-            Delegate defaultExpression)
-            where TPart : ContentPart<TRecord>
-        {
-
-            var propertyInfo = ReflectionHelper<TRecord>.GetPropertyInfo(targetExpression);
-            var name = propertyInfo.Name;
-
-            var infosetPart = contentPart.As<InfosetPart>();
-            var el = infosetPart == null
-                ? null
-                : infosetPart.Infoset.Element.Element(contentPart.GetType().Name);
-            if (el == null || el.Attribute(name) == null)
-            {
-                // Property has never been stored. Get it from the default expression and store that.
-                var defaultValue = defaultExpression == null
-                    ? default(TProperty)
-                    : (TProperty)defaultExpression.DynamicInvoke(contentPart.Record);
-                contentPart.Store(name, defaultValue);
-                return defaultValue;
-            }
-            return el.Attr<TProperty>(name);
-        }
-
         public static void Store<TPart, TRecord, TProperty>(this TPart contentPart,
             Expression<Func<TRecord, TProperty>> targetExpression,
             TProperty value)
@@ -558,8 +582,9 @@ namespace Orchard.ContentManagement
 
             var propertyInfo = ReflectionHelper<TRecord>.GetPropertyInfo(targetExpression);
             var name = propertyInfo.Name;
+            var versioned = typeof(ContentPartVersionRecord).IsAssignableFrom(typeof(TRecord));
             propertyInfo.SetValue(contentPart.Record, value, null);
-            contentPart.Store(name, value);
+            contentPart.Store(name, value, versioned);
         }
     }
 }

@@ -35,25 +35,19 @@ namespace RealtyShares.UserNotifications.Services
                 .Where<CommonPartRecord>(record => record.Id > notificationsUserPart.LastProcessedNotificationId)
                 .Count();
 
-            maxNotificationBatchCountToCheck = Math.Min(uncheckedNotificationCount, maxNotificationBatchCountToCheck);
+            var notifications = _notificationService.FetchNotifications(user, Math.Min(uncheckedNotificationCount, maxNotificationBatchCountToCheck));
 
-            var notifications = _notificationService.FetchNotifications(user, maxNotificationBatchCountToCheck);
-
-            var existingUserNotificationEntries = notificationsUserPart.RecentNotificationEntries.ToDictionary(entry => entry.NotificationId);
-            var newUserNotificationEntries = new List<NotificationUserEntry>(maxNotificationBatchCountToCheck);
+            var existingUserNotificationEntriesLookup = notificationsUserPart.RecentNotificationEntries.ToDictionary(entry => entry.NotificationId);
+            var existingUserNotificationEntries = new Stack<NotificationUserEntry>(notificationsUserPart.RecentNotificationEntries.Reverse());
             foreach (var notification in notifications)
             {
                 var notificationId = notification.ContentItem.Id;
-                if (existingUserNotificationEntries.ContainsKey(notificationId))
+                if (!existingUserNotificationEntriesLookup.ContainsKey(notificationId))
                 {
-                    newUserNotificationEntries.Add(existingUserNotificationEntries[notificationId]);
-                }
-                else
-                {
-                    newUserNotificationEntries.Add(new NotificationUserEntry { NotificationId = notificationId });
+                    existingUserNotificationEntries.Push(new NotificationUserEntry { NotificationId = notificationId });
                 }
             }
-            notificationsUserPart.RecentNotificationEntries = newUserNotificationEntries;
+            notificationsUserPart.RecentNotificationEntries = existingUserNotificationEntries.Take(maxNotificationBatchCountToCheck);
 
             if (notifications.Any())
             {
@@ -61,10 +55,12 @@ namespace RealtyShares.UserNotifications.Services
             }
         }
 
-        public IEnumerable<INotification> GetRecentNotificationsForUser(IUser user, int maxCount)
+        public IEnumerable<INotification> GetRecentNotificationsForUser(IUser user, int maxCount, bool justUnread)
         {
+            var notificationIds = GetNotificationsUserPartOrThrow(user).RecentNotificationEntries;
+            if (justUnread) notificationIds = notificationIds.Where(notification => !notification.IsRead);
             return _contentManager
-                .GetMany<IContent>(GetNotificationsUserPartOrThrow(user).RecentNotificationEntries.Take(maxCount).Select(entry => entry.NotificationId), VersionOptions.Published, QueryHints.Empty)
+                .GetMany<IContent>(notificationIds.Take(maxCount).Select(entry => entry.NotificationId), VersionOptions.Published, QueryHints.Empty)
                 .Select(notificationBatch => _notificationConverter.ConvertBatchToNotification(notificationBatch, user));
         }
 
