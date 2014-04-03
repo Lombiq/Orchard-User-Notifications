@@ -1,10 +1,10 @@
 ﻿using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Handlers;
+using Orchard.Settings;
 using RealtyShares.UserNotifications.Models;
 using RealtyShares.UserNotifications.Services;
-using System;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace RealtyShares.UserNotifications.Handlers
 {
@@ -13,48 +13,25 @@ namespace RealtyShares.UserNotifications.Handlers
     /// </summary>
     public class NotificationWidgetPartHandler : ContentHandler
     {
-        public NotificationWidgetPartHandler(INotificationsToUserDispatcher notificationDispatcher, IWorkContextAccessor wca)
+        public NotificationWidgetPartHandler(INotificationsToUserDispatcher notificationDispatcher, IWorkContextAccessor wca, ISiteService siteService)
         {
             OnActivated<NotificationWidgetPart>((context, part) =>
             {
                 part.UnreadNotificationsField.Loader(() =>
                     {
-                        //var unreadNotifications = notificationDispatcher.GetRecentNotificationsForUser(wca.GetContext().CurrentUser, 50).ToList();
+                        var currentUser = wca.GetContext().CurrentUser;
 
-                        // For testing purposes.
-                        var unreadNotifications = new List<INotification>()
+                        if (currentUser == null)
                         {
-                            new TestNotification
-                            {
-                                Id = 0,
-                                ContentItem = null,
-                                TitleLazy = new Lazy<string>(() => "Important Notification"),
-                                BodyLazy = new Lazy<string>(() => "You have to go to the bathroom soon...")
-                            },
-                            new TestNotification
-                            {
-                                Id = 1,
-                                ContentItem = null,
-                                TitleLazy = new Lazy<string>(() => "Less Important Notification"),
-                                BodyLazy = new Lazy<string>(() => "You run out of toilet paper...")
-                            }
-                        };
+                            return Enumerable.Empty<INotification>().ToList();
+                        }
+
+                        var notificationCount = siteService.GetSiteSettings().As<NotificationWidgetSettingsPart>().NotificationCount;
+                        var unreadNotifications = notificationDispatcher.GetRecentNotificationsForUser(wca.GetContext().CurrentUser, notificationCount).ToList();
 
                         return unreadNotifications;
                     });
             });
-        }
-
-
-        // For testing purposes.
-        private class TestNotification : INotification
-        {
-            public int Id { get; set; }
-            public ContentItem ContentItem { get; set; }
-            public Lazy<string> TitleLazy { get; set; }
-            public string Title { get { return TitleLazy.Value; } }
-            public Lazy<string> BodyLazy { get; set; }
-            public string Body { get { return BodyLazy.Value; } }
         }
     }
 }

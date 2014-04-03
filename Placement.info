@@ -6,4 +6,6 @@
   <Match ContentType="NotificationBatch">
     <Place Parts_NotificationRecipients_Edit="Content:before.2" />
   </Match>
+  
+  <Place Parts_NotificationWidgetSettings_Edit="Content:11"/>
 </Placement>

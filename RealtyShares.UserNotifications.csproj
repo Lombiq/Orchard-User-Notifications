@@ -106,11 +106,14 @@
     <Compile Include="Drivers\NotificationBatchPartDriver.cs" />
     <Compile Include="Drivers\NotificationRecipientsPartDriver.cs" />
     <Compile Include="Drivers\NotificationWidgetPartDriver.cs" />
+    <Compile Include="Drivers\NotificationWidgetSettingsPartDriver.cs" />
     <Compile Include="Handlers\NotificationBatchPartHandler.cs" />
     <Compile Include="Handlers\NotificationsUserPartHandler.cs" />
     <Compile Include="Handlers\NotificationRecipientsPartHandler.cs" />
     <Compile Include="Handlers\NotificationWidgetPartHandler.cs" />
+    <Compile Include="Handlers\NotificationWidgetSettingsPartHandler.cs" />
     <Compile Include="Migrations.cs" />
+    <Compile Include="Models\NotificationWidgetSettingsPart.cs" />
     <Compile Include="Models\INotification.cs" />
     <Compile Include="Models\NotificationBatchPart.cs" />
     <Compile Include="Models\NotificationsUserPart.cs" />
@@ -137,6 +140,7 @@
     <Content Include="Styles\realtyshares-usernotifications-notificationwidget.less" />
     <None Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Parts.NotificationWidget.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts.NotificationWidgetSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Placement.info">

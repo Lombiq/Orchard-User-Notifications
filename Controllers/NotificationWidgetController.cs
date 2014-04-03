@@ -38,19 +38,19 @@ namespace RealtyShares.UserNotifications.Controllers
             }
 
             // Commented out for testing purposes.
-            //var notificationUserPart = _wca.GetContext().CurrentUser.As<NotificationsUserPart>();
+            var notificationUserPart = _wca.GetContext().CurrentUser.As<NotificationsUserPart>();
 
-            //var entryCollection = notificationUserPart.RecentNotificationEntries;
-            //var relevantNotificationEntry = entryCollection.FirstOrDefault(entry => entry.NotificationId == id);
+            var entryCollection = notificationUserPart.RecentNotificationEntries;
+            var relevantNotificationEntry = entryCollection.FirstOrDefault(entry => entry.NotificationId == id);
 
-            //if (relevantNotificationEntry == null)
-            //{
-            //    return false;
-            //}
+            if (relevantNotificationEntry == null)
+            {
+                return false;
+            }
 
-            //relevantNotificationEntry.IsRead = true;
+            relevantNotificationEntry.IsRead = true;
 
-            //notificationUserPart.RecentNotificationEntries = entryCollection;
+            notificationUserPart.RecentNotificationEntries = entryCollection;
 
             return true;
         }

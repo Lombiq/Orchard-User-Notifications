@@ -17,7 +17,7 @@
     <div class="realtyshares-usernotifications-notificationwidget-notification">
         <div class="realtyshares-usernotifications-notificationwidget-remove" data-id="@notification.Id"></div>
         <div class="realtyshares-usernotifications-notificationwidget-title">@notification.Title</div>
-        <div class="realtyshares-usernotifications-notificationwidget-body">@notification.Body</div>
+        <div class="realtyshares-usernotifications-notificationwidget-body">@Html.Raw(notification.Body)</div>
     </div>
 }
 
