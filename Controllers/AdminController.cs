@@ -1,6 +1,5 @@
 ﻿using Orchard;
 using Orchard.ContentManagement;
-using Orchard.Core.Common.Models;
 using Orchard.Core.Title.Models;
 using Orchard.Localization;
 using Orchard.Logging;
@@ -69,10 +68,7 @@ namespace RealtyShares.UserNotifications.Controllers
                 return new HttpUnauthorizedResult(T("You are not allowed to manage notifications.").Text);
             }
 
-            var keywords = (viewModel.Keywords ?? String.Empty).Split(' ', ',');
-
-            var notificationBatchItems = _notificationBatchService.GetFilteredNotificationBatches(keywords, 
-                viewModel.FromDate, viewModel.ToDate, viewModel.NotificationBatchSortBy);
+            var notificationBatchItems = _notificationBatchService.GetFilteredNotificationBatches(viewModel.Keywords, viewModel.FromDate, viewModel.ToDate, viewModel.NotificationBatchSortBy);
 
             return GetNotificationBatchListViewResult(notificationBatchItems);
         }
