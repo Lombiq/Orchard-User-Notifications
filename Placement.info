@@ -1,10 +1,14 @@
 ﻿<Placement>
   <Place Parts_NotificationRecipients_Edit="Content:5"
          Parts_NotificationBatch_Edit="Content:before.1"
-         Parts_NotificationWidget="Content:5" />
+         Parts_NotificationWidget="Content:5"/>
 
   <Match ContentType="NotificationBatch">
-    <Place Parts_NotificationRecipients_Edit="Content:before.2" />
+    <Place Parts_NotificationRecipients_Edit="Content:before.2"
+           Parts_Title_Edit_Tokenized="Content:before.5"
+           Parts_Title_Edit="-"
+           Parts_Common_Body_Edit_Tokenized="Content:2"
+           Parts_Common_Body_Edit="-" />
   </Match>
   
   <Place Parts_NotificationWidgetSettings_Edit="Content:11"/>
