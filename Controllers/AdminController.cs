@@ -72,7 +72,7 @@ namespace RealtyShares.UserNotifications.Controllers
             var keywords = (viewModel.Keywords ?? String.Empty).Split(' ', ',');
 
             var notificationBatchItems = _notificationBatchService.GetFilteredNotificationBatches(keywords, 
-                viewModel.FromDate ?? DateTime.MinValue, viewModel.ToDate ?? DateTime.MaxValue, viewModel.NotificationBatchSortBy);
+                viewModel.FromDate, viewModel.ToDate, viewModel.NotificationBatchSortBy);
 
             return GetNotificationBatchListViewResult(notificationBatchItems);
         }

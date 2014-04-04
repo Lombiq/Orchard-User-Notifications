@@ -23,7 +23,7 @@ namespace RealtyShares.UserNotifications.Services
         public IEnumerable<ContentItem> GetRecipientLists()
         {
             var notificationBatchItems = _contentManager
-                .Query(VersionOptions.Published, Constants.RecipientListContentType)
+                .Query(VersionOptions.Latest, Constants.RecipientListContentType)
                 .OrderByDescending<TitlePartRecord>(record => record.Title)
                 .List();
 
@@ -32,22 +32,24 @@ namespace RealtyShares.UserNotifications.Services
 
         public IEnumerable<ContentItem> GetOrderedRecipientLists(RecipientListSortBy sortBy)
         {
-            var recipientListItems = GetRecipientLists();
+            var recipientListItems = _contentManager.Query(VersionOptions.Latest, Constants.RecipientListContentType);
 
             switch (sortBy)
             {
-                case RecipientListSortBy.RecentlyCreatedDate: recipientListItems = recipientListItems.OrderByDescending(item => item.As<CommonPart>().CreatedUtc);
+                case RecipientListSortBy.RecentlyCreatedDate: recipientListItems = recipientListItems
+                    .OrderByDescending<CommonPartRecord>(record => record.CreatedUtc);
                     break;
-                case RecipientListSortBy.RecentlyModifiedDate: recipientListItems = recipientListItems.OrderByDescending(item => item.As<CommonPart>().ModifiedUtc);
+                case RecipientListSortBy.RecentlyModifiedDate: recipientListItems = recipientListItems
+                    .OrderByDescending<CommonPartRecord>(record => record.ModifiedUtc);
                     break;
-                case RecipientListSortBy.Title:
-                    // It is already ordered by title.
+                case RecipientListSortBy.Title: recipientListItems = recipientListItems
+                    .OrderBy<TitlePartRecord>(record => record.Title);
                     break;
                 default:
-                    break;
+                    throw new ArgumentOutOfRangeException("sortBy");
             }
 
-            return recipientListItems;
+            return recipientListItems.List();
         }
     }
 }

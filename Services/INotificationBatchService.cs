@@ -13,6 +13,6 @@ namespace RealtyShares.UserNotifications.Services
     {
         IEnumerable<ContentItem> GetNotificationBatches();
 
-        IEnumerable<ContentItem> GetFilteredNotificationBatches(string[] keywords, DateTime fromDate, DateTime toDate, NotificationBatchSortBy sortBy);
+        IEnumerable<ContentItem> GetFilteredNotificationBatches(string[] keywords, DateTime? fromDate, DateTime? toDate, NotificationBatchSortBy sortBy);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Orchard.ContentManagement;
 using Orchard.Core.Common.Models;
 using Orchard.Core.Title.Models;
+using Orchard.Validation;
 using RealtyShares.UserNotifications.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -30,23 +31,28 @@ namespace RealtyShares.UserNotifications.Services
             return notificationBatchItems;
         }
 
-        public IEnumerable<ContentItem> GetFilteredNotificationBatches(string[] keywords, DateTime fromDate, DateTime toDate, NotificationBatchSortBy sortBy)
+        public IEnumerable<ContentItem> GetFilteredNotificationBatches(string[] keywords, DateTime? fromDate, DateTime? toDate, NotificationBatchSortBy sortBy)
         {
-            var notificationBatchItems = GetNotificationBatches()
-                .Where(item => item.As<CommonPart>().CreatedUtc >= fromDate
-                    && item.As<CommonPart>().CreatedUtc <= toDate);
+            var notificationBatchItems = _contentManager.Query(VersionOptions.Latest, Constants.NotificationBatchContentType);
+
+            if (fromDate != null && toDate != null)
+            {
+                notificationBatchItems = notificationBatchItems.Where<CommonPartRecord>(record => record.CreatedUtc >= fromDate.Value && record.CreatedUtc <= toDate.Value);
+            }
 
             switch (sortBy)
             {
-                case NotificationBatchSortBy.DateSent: notificationBatchItems = notificationBatchItems.OrderBy(item => item.As<CommonPart>().PublishedUtc);
+                case NotificationBatchSortBy.DateSent: notificationBatchItems = notificationBatchItems
+                    .OrderByDescending<CommonPartRecord>(record => record.PublishedUtc);
                     break;
-                case NotificationBatchSortBy.Title: notificationBatchItems = notificationBatchItems.OrderBy(item => item.As<TitlePart>().Title);
+                case NotificationBatchSortBy.Title: notificationBatchItems = notificationBatchItems
+                    .OrderBy<TitlePartRecord>(record => record.Title);
                     break;
-                default: notificationBatchItems = notificationBatchItems.OrderBy(item => item.As<CommonPart>().CreatedUtc);
-                    break;
+                default: 
+                    throw new ArgumentOutOfRangeException("sortBy");
             }
 
-            return notificationBatchItems;
+            return notificationBatchItems.List();
         }
     }
 }
