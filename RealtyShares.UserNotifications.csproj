@@ -155,10 +155,10 @@
     <None Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Parts.NotificationWidget.cshtml" />
     <Content Include="Views\EditorTemplates\Parts.NotificationWidgetSettings.cshtml" />
-    <Content Include="Views\RealtyShares.Parts.Title.Tokenized.cshtml" />
-    <Content Include="Views\RealtyShares.Parts.Common.Body.Tokenized.cshtml" />
-    <Content Include="Views\RealtyShares.Parts.PublishLater.cshtml" />
-    <Content Include="Views\RealtyShares.Content.PublishButton.cshtml" />
+    <Content Include="Views\UserNotifications.Parts.Title.Tokenized.cshtml" />
+    <Content Include="Views\UserNotifications.Parts.Common.Body.Tokenized.cshtml" />
+    <Content Include="Views\UserNotifications.Parts.PublishLater.cshtml" />
+    <Content Include="Views\UserNotifications.Content.PublishButton.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Placement.info">
