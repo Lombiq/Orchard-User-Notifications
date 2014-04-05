@@ -1,9 +1,0 @@
-﻿@model Orchard.Core.Common.Models.BodyPart
-
-<fieldset>
-    @Html.LabelFor(m => m.Text, T("Notification Text"))
-    @Html.TextAreaFor(m => m.Text, new { @class = "text large tokenized" })
-    @Html.ValidationMessageFor(m => m.Text)
-</fieldset>
-
-@Display.TokenHint()

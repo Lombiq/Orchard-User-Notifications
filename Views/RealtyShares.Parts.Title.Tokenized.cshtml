@@ -1,0 +1,14 @@
+﻿@{
+    var titlePart = Model.Model as Orchard.Core.Title.Models.TitlePart;
+    var prefix = Model.Metadata.Prefix as string;
+    var titleFieldName = String.Format("{0}.Title", prefix);
+    var titleFieldId = String.Format("{0}_Title", prefix);
+}
+
+<fieldset>
+    <label for="@titleFieldId">@T("Title")</label>
+    @Html.TextBox(titleFieldName, titlePart.Title, new { @class = "text large tokenized", autofocus = "autofocus" })
+    <span class="hint">@T("You must provide a title for this content item")</span>
+</fieldset>
+
+@Display.TokenHint()

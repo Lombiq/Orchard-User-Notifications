@@ -5,10 +5,10 @@
 
   <Match ContentType="NotificationBatch">
     <Place Parts_NotificationRecipients_Edit="Content:before.2"
-           Parts_Title_Edit_Tokenized="Content:before.5"
-           Parts_Title_Edit="-"
-           Parts_Common_Body_Edit_Tokenized="Content:2"
-           Parts_Common_Body_Edit="-" />
+           Parts_Title_Edit="Content:before.5;Shape=RealtyShares_Parts_Title_Tokenized"
+           Parts_Common_Body_Edit="Content:2;Shape=RealtyShares_Parts_Common_Body_Tokenized"
+           Content_PublishButton="Sidebar:24;Shape=RealtyShares_Content_PublishButton"
+           Parts_PublishLater_Edit="Sidebar:25;Shape=RealtyShares_Parts_PublishLater"/>
   </Match>
   
   <Place Parts_NotificationWidgetSettings_Edit="Content:11"/>

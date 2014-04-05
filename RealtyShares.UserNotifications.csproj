@@ -89,6 +89,10 @@
       <Project>{9916839C-39FC-4CEB-A5AF-89CA7E87119F}</Project>
       <Name>Orchard.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Orchard.PublishLater\Orchard.PublishLater.csproj">
+      <Project>{c889167c-e52c-4a65-a419-224b3d1b957d}</Project>
+      <Name>Orchard.PublishLater</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Orchard.Roles\Orchard.Roles.csproj">
       <Project>{d10ad48f-407d-4db5-a328-173ec7cb010f}</Project>
       <Name>Orchard.Roles</Name>
@@ -111,12 +115,10 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\NotificationWidgetController.cs" />
-    <Compile Include="Drivers\BodyPartDriver.cs" />
     <Compile Include="Drivers\NotificationBatchPartDriver.cs" />
     <Compile Include="Drivers\NotificationRecipientsPartDriver.cs" />
     <Compile Include="Drivers\NotificationWidgetPartDriver.cs" />
     <Compile Include="Drivers\NotificationWidgetSettingsPartDriver.cs" />
-    <Compile Include="Drivers\TitlePartDriver.cs" />
     <Compile Include="Events\IUserNotificationsUpdaterEventHandler.cs" />
     <Compile Include="Filters\UserNotificationsUpdaterFilter.cs" />
     <Compile Include="Handlers\NotificationBatchPartHandler.cs" />
@@ -153,8 +155,10 @@
     <None Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Parts.NotificationWidget.cshtml" />
     <Content Include="Views\EditorTemplates\Parts.NotificationWidgetSettings.cshtml" />
-    <Content Include="Views\EditorTemplates\Parts.Title.Tokenized.cshtml" />
-    <Content Include="Views\EditorTemplates\Parts.Common.Body.Tokenized.cshtml" />
+    <Content Include="Views\RealtyShares.Parts.Title.Tokenized.cshtml" />
+    <Content Include="Views\RealtyShares.Parts.Common.Body.Tokenized.cshtml" />
+    <Content Include="Views\RealtyShares.Parts.PublishLater.cshtml" />
+    <Content Include="Views\RealtyShares.Content.PublishButton.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Placement.info">

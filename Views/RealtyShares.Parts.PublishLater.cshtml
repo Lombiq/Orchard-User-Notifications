@@ -1,0 +1,61 @@
+﻿@using Orchard.ContentManagement;
+@using Orchard.Core.Contents;
+@using Orchard.Utility.Extensions;
+
+@{
+    Style.Require("PublishLater_DatePicker");
+
+    var publishLaterViewModel = Model.Model as Orchard.PublishLater.ViewModels.PublishLaterViewModel;
+    var prefix = Model.Metadata.Prefix as string;
+    var scheduledPublishDateFieldName = String.Format("{0}.ScheduledPublishDate", prefix);
+    var scheduledPublishTimeFieldName = String.Format("{0}.ScheduledPublishTime", prefix);
+    var scheduledPublishDateFieldId = String.Format("{0}_ScheduledPublishDate", prefix);
+    var scheduledPublishTimeFieldId = String.Format("{0}_ScheduledPublishTime", prefix);
+}
+
+@if (Authorizer.Authorize(Permissions.PublishContent, Model.Model.ContentItem)) {
+    
+<fieldset class="publish-later-datetime">
+    <legend>@T("Send")</legend>
+    <label class="forpicker" for="@scheduledPublishDateFieldId">@T("Date")</label>
+    @Html.TextBox(scheduledPublishDateFieldName, publishLaterViewModel.ScheduledPublishDate)
+    
+    <label class="forpicker" for="@scheduledPublishTimeFieldId">@T("Time")</label>
+    @Html.TextBox(scheduledPublishTimeFieldName, publishLaterViewModel.ScheduledPublishTime)
+	<button type="submit" name="submit.Save" value="submit.PublishLater">@T("Send Later")</button>
+</fieldset>
+
+using (Script.Foot()) {
+
+    @* generates the localization script *@
+    @Display(New.DatePickerLocalization())
+    @Display(New.TimePickerLocalization())
+
+<script type="text/javascript">
+//<![CDATA[
+    $(function () {
+        
+        var clearHint = function ($this) { if ($this.val() == $this.data("hint")) { $this.removeClass("hinted").val("") } };
+        var resetHint = function ($this) { setTimeout(function () { if (!$this.val()) { $this.addClass("hinted").val($this.data("hint")) } }, 300) };
+        @* todo: (heskew) make a plugin *@
+        $("label.forpicker").each(function () {
+            var $this = $(this);
+            var pickerInput = $("#" + $this.attr("for"));
+            if (!pickerInput.val()) {
+                pickerInput.data("hint", $this.text());
+                pickerInput.addClass("hinted")
+                    .val(pickerInput.data("hint"))
+                    .focus(function() {clearHint($(this));})
+                    .blur(function() {resetHint($(this));});
+                $this.closest("form").submit(function() {clearHint(pickerInput); pickerInput = 0;});
+            }
+        });
+        
+        $('#@scheduledPublishDateFieldId').datepicker({ showAnim: "" }).focus(function () { $('#@ViewData.TemplateInfo.GetFullHtmlFieldId("Command_PublishLater")').attr("checked", "checked") });
+        $('#@scheduledPublishTimeFieldId').timepicker({ stepMinute: 5 }).focus(function () { $('#@ViewData.TemplateInfo.GetFullHtmlFieldId("Command_PublishLater")').attr("checked", "checked") });
+    })
+//]]>
+</script>
+}
+
+}

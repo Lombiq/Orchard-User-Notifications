@@ -1,0 +1,14 @@
+﻿@{
+    var bodyPart = (Model.Model as Orchard.Core.Common.ViewModels.BodyEditorViewModel).BodyPart;
+    var prefix = Model.Metadata.Prefix as string;
+    var textFieldName = String.Format("{0}.Text", prefix);
+    var textFieldId = String.Format("{0}_Text", prefix);
+}
+
+<fieldset>
+    <label for="@textFieldId">@T("Notification Text")</label>
+    @Html.TextArea(textFieldName, bodyPart.Text, new { @class = "text large tokenized" })
+    @Html.ValidationMessage(textFieldName)
+</fieldset>
+
+@Display.TokenHint()
