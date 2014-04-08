@@ -22,7 +22,7 @@ namespace RealtyShares.UserNotifications.Services
         {
             var notificationBatchItems = _contentManager
                 .Query(VersionOptions.Latest, Constants.RecipientListContentType)
-                .OrderByDescending<TitlePartRecord>(record => record.Title)
+                .OrderBy<TitlePartRecord>(record => record.Title)
                 .List();
 
             return notificationBatchItems;
