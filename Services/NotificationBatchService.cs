@@ -51,7 +51,7 @@ namespace RealtyShares.UserNotifications.Services
             IEnumerable<ISearchHit> searchHits = new PageOfItems<ISearchHit>(new ISearchHit[] { });
 
             searchHits = _searchService.Query(keywords, pager.Page, pager.PageSize,
-                                              _orchardServices.WorkContext.CurrentSite.As<SearchSettingsPart>().Record.FilterCulture,
+                                              _orchardServices.WorkContext.CurrentSite.As<SearchSettingsPart>().FilterCulture,
                                               searchSettingsPart.SearchIndex,
                                               searchSettingsPart.SearchedFields,
                                               searchHit => searchHit);
