@@ -1,7 +1,7 @@
 ﻿Name: User Notifications
 AntiForgery: enabled
 Author: Lombiq
-Website: http://realtyshares.com
+Website: https://orchardusernotifications.codeplex.com
 Version: 1.0
 OrchardVersion: 1.8
 Description: Provides the ability to send simple notifications to users and groups of users.
