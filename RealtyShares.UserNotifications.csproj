@@ -161,6 +161,12 @@
     <Content Include="Styles\realtyshares-usernotifications-notificationbatchlist.less" />
     <Content Include="Views\Admin\ManageRecipientLists.cshtml" />
     <Content Include="Styles\realtyshares-usernotifications-notificationwidget.less" />
+    <Content Include="Styles\realtyshares-usernotifications-notificationbatchlist.css.map">
+      <DependentUpon>realtyshares-usernotifications-notificationbatchlist.css</DependentUpon>
+    </Content>
+    <Content Include="Styles\realtyshares-usernotifications-notificationwidget.css.map">
+      <DependentUpon>realtyshares-usernotifications-notificationwidget.css</DependentUpon>
+    </Content>
     <None Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Parts.NotificationWidget.cshtml" />
     <Content Include="Views\EditorTemplates\Parts.NotificationWidgetSettings.cshtml" />
