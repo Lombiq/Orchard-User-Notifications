@@ -1,7 +1,7 @@
 ﻿Name: User Notifications
 AntiForgery: enabled
 Author: Lombiq
-Website: https://orchardusernotifications.codeplex.com
+Website: https://github.com/Lombiq/Orchard-User-Notifications
 Version: 1.0
 OrchardVersion: 1.7.2
 Description: Provides the ability to send simple notifications to users and groups of users.
