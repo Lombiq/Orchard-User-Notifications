@@ -7,7 +7,7 @@
         <li>
             @Html.LabelFor(m => m.NotificationCount, @T("Max Notification Count"))
             @Html.TextBoxFor(m => m.NotificationCount, new { @class = "text small" })
-            <span class="hint">@T("Maximum notification count to display on front-end.")</span>
+            @Html.Hint(T("Maximum notification count to display on front-end."))
         </li>
     </ol>
 </fieldset>
