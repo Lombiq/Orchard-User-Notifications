@@ -4,6 +4,7 @@ using Orchard.ContentManagement;
 using Orchard.Core.Common.Models;
 using Orchard.Core.Title.Models;
 using Orchard.Indexing;
+using Orchard.Search.Helpers;
 using Orchard.Search.Models;
 using Orchard.Search.Services;
 using Orchard.Settings;
@@ -51,9 +52,9 @@ namespace RealtyShares.UserNotifications.Services
             IEnumerable<ISearchHit> searchHits = new PageOfItems<ISearchHit>(new ISearchHit[] { });
 
             searchHits = _searchService.Query(keywords, pager.Page, pager.PageSize,
-                                              _orchardServices.WorkContext.CurrentSite.As<SearchSettingsPart>().Record.FilterCulture,
+                                              _orchardServices.WorkContext.CurrentSite.As<SearchSettingsPart>().FilterCulture,
                                               searchSettingsPart.SearchIndex,
-                                              searchSettingsPart.SearchedFields,
+                                              searchSettingsPart.GetSearchFields(),
                                               searchHit => searchHit);
 
             var notificationBatchItems = _contentManager

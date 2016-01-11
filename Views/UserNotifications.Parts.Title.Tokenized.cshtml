@@ -8,7 +8,7 @@
 <fieldset>
     <label for="@titleFieldId">@T("Title")</label>
     @Html.TextBox(titleFieldName, titlePart.Title, new { @class = "text large tokenized", autofocus = "autofocus" })
-    <span class="hint">@T("You must provide a title for this content item")</span>
+    @Html.Hint(T("You must provide a title for this content item"))
 </fieldset>
 
 @Display.TokenHint()

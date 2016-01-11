@@ -39,7 +39,7 @@ namespace RealtyShares.UserNotifications.Services
         public IEnumerable<INotification> FetchNotifications(IUser recipient, int maxNotificationBatchCountToCheck)
         {
             // This is the drawback of using this setup: we gain by not having to do operations in the magnitude of the count of recipients
-            // when sending notifications but we have to do a liner search for notifications per a given user.
+            // when sending notifications but we have to do a linear search for notifications per a given user.
             return _contentManager
                 .Query(VersionOptions.Published, Constants.NotificationBatchContentType)
                 .OrderByDescending<CommonPartRecord>(record => record.Id)

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,10 +12,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RealtyShares.UserNotifications</RootNamespace>
     <AssemblyName>RealtyShares.UserNotifications</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <MvcBuildViews>false</MvcBuildViews>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <MvcBuildViews Condition=" '$(BuildViews)' == 'true' ">true</MvcBuildViews>
+    <FileUpgradeFlags></FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
@@ -34,6 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,6 +43,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -55,7 +56,11 @@
     <Reference Include="System.ComponentModel.DataAnnotations">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\lib\aspnetmvc\System.Web.Mvc.dll</HintPath>
@@ -75,8 +80,12 @@
       <DependentUpon>realtyshares-usernotifications-notificationwidget.less</DependentUpon>
     </Content>
     <Content Include="Web.config" />
-    <Content Include="Scripts\Web.config" />
-    <Content Include="Styles\Web.config" />
+    <Content Include="Scripts\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Styles\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Properties\AssemblyInfo.cs" />
     <Content Include="Module.txt" />
   </ItemGroup>
@@ -146,12 +155,17 @@
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\NotificationsToUserDispatcher.cs" />
     <Compile Include="Events\UserNotificationsUpdaterEventHandler.cs" />
-    <Compile Include="TheShiftHelpers.cs" />
     <Compile Include="ViewModels\RecipientListsViewModel.cs" />
     <Compile Include="ViewModels\NotificationBatchListViewModel.cs" />
     <Content Include="Styles\realtyshares-usernotifications-notificationbatchlist.less" />
     <Content Include="Views\Admin\ManageRecipientLists.cshtml" />
     <Content Include="Styles\realtyshares-usernotifications-notificationwidget.less" />
+    <Content Include="Styles\realtyshares-usernotifications-notificationbatchlist.css.map">
+      <DependentUpon>realtyshares-usernotifications-notificationbatchlist.css</DependentUpon>
+    </Content>
+    <Content Include="Styles\realtyshares-usernotifications-notificationwidget.css.map">
+      <DependentUpon>realtyshares-usernotifications-notificationwidget.css</DependentUpon>
+    </Content>
     <None Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Parts.NotificationWidget.cshtml" />
     <Content Include="Views\EditorTemplates\Parts.NotificationWidgetSettings.cshtml" />
@@ -170,9 +184,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\EditorTemplates\Parts.NotificationRecipients.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Readme.md" />
@@ -212,8 +223,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>45979</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl></IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>True</UseCustomServer>
           <CustomServerUrl>http://orchard.codeplex.com</CustomServerUrl>
