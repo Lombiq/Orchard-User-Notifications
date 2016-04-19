@@ -32,8 +32,8 @@ namespace RealtyShares.UserNotifications.Services
             _orchardServices = orchardServices;
             _siteService = siteService;
         }
-	
-			
+    
+            
         public IEnumerable<ContentItem> GetNotificationBatches()
         {
             var notificationBatchItems = _contentManager
@@ -54,7 +54,7 @@ namespace RealtyShares.UserNotifications.Services
             searchHits = _searchService.Query(keywords, pager.Page, pager.PageSize,
                                               _orchardServices.WorkContext.CurrentSite.As<SearchSettingsPart>().FilterCulture,
                                               searchSettingsPart.SearchIndex,
-                                              searchSettingsPart.GetSearchFields(),
+                                              searchSettingsPart.GetSearchFields(searchSettingsPart.SearchIndex),
                                               searchHit => searchHit);
 
             var notificationBatchItems = _contentManager
