@@ -3,11 +3,11 @@ AntiForgery: enabled
 Author: Lombiq
 Website: https://github.com/Lombiq/Orchard-User-Notifications
 Version: 1.0
-OrchardVersion: 1.9.0
+OrchardVersion: 1.10
 Description: Provides the ability to send simple notifications to users and groups of users.
 Features:
     RealtyShares.UserNotifications:
         Name: User Notifications
         Description: Provides the ability to send simple notifications to users and groups of users.
         Category: Community
-		Dependencies: Orchard.Users, Orchard.Roles, Orchard.Tokens, Orchard.jQuery, Orchard.Search
+		Dependencies: Orchard.Users, Orchard.Roles, Orchard.Tokens, Orchard.Resources, Orchard.Search
