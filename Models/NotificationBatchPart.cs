@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using Orchard.ContentManagement;
 using Orchard.Core.Common.Models;
-using Orchard.Core.Common.Utilities;
+using Orchard.ContentManagement.Utilities;
 using Orchard.Core.Title.Models;
 using Orchard.Roles.Models;
 using Orchard.Security;
